@@ -1,0 +1,374 @@
+[2026-05-08 14:00:45] INFO     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+[2026-05-08 14:00:45] INFO     🚀 BillLess Agent starting…
+[2026-05-08 14:00:45] INFO     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+[2026-05-08 14:00:45] INFO     Agent version: 2.1.0
+[2026-05-08 14:00:45] INFO     Config version: 4
+[2026-05-08 14:00:45] INFO     🌐 API URL: http://127.0.0.1:8000
+[2026-05-08 14:00:45] INFO     📁 Watch folder OK: /Users/ashfar/Documents/BillLess/incoming
+[2026-05-08 14:00:45] INFO     📁 Incoming:   /Users/ashfar/Documents/BillLess/incoming
+[2026-05-08 14:00:45] INFO     📁 Processing: /Users/ashfar/Documents/BillLess/processing
+[2026-05-08 14:00:45] INFO     📁 Processed:  /Users/ashfar/Documents/BillLess/processed
+[2026-05-08 14:00:45] INFO     📁 Failed:     /Users/ashfar/Documents/BillLess/failed
+[2026-05-08 14:00:45] INFO     📁 Archive:    /Users/ashfar/Documents/BillLess/archive
+[2026-05-08 14:00:45] INFO     🏪 Shop: SHOP001 | Device: DEV001 | Counter: C1
+[2026-05-08 14:00:45] INFO     🗄️  Database initialised
+Unknown property text-overflow
+Unknown property text-overflow
+Unknown property text-overflow
+QSystemTrayIcon::setVisible: No Icon set
+[2026-05-08 14:00:48] INFO     👁️  Watching: /Users/ashfar/Documents/BillLess/incoming
+[2026-05-08 14:00:48] INFO     🔍 No device found – will retry in background
+[2026-05-08 14:00:48] INFO     💓 Heartbeat service started
+[2026-05-08 14:00:48] INFO     ✅ All services running
+[2026-05-08 14:00:48] INFO     📁 Drop PDFs into: /Users/ashfar/Documents/BillLess/incoming
+Unknown property text-overflow
+Unknown property text-overflow
+qt.qpa.fonts: Populating font family aliases took 217 ms. Replace uses of missing font family "SF Mono" with one that exists to avoid this cost. 
+[2026-05-08 14:00:49] WARNING  💔 Heartbeat failed: Connection error
+[2026-05-08 14:00:53] INFO     👁️  Watcher stopped
+[2026-05-08 14:00:54] INFO     🔌 Device disconnected
+[2026-05-08 14:00:59] INFO     🛑 Agent stopped
+[2026-05-08 14:00:59] INFO     🔌 Device disconnected
+[2026-05-08 14:01:04] INFO     🛑 Agent stopped
+[2026-05-08 14:03:10] INFO     🛑 Shutting down…
+[2026-05-08 14:03:10] INFO     🔌 Device disconnected
+[2026-05-08 14:03:10] INFO     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+[2026-05-08 14:03:10] INFO     🚀 BillLess Agent starting…
+[2026-05-08 14:03:10] INFO     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+[2026-05-08 14:03:10] INFO     Agent version: 2.1.0
+[2026-05-08 14:03:10] INFO     Config version: 4
+[2026-05-08 14:03:10] INFO     🌐 API URL: http://127.0.0.1:8000
+[2026-05-08 14:03:10] INFO     📁 Watch folder OK: /Users/ashfar/Documents/BillLess/incoming
+[2026-05-08 14:03:10] INFO     📁 Incoming:   /Users/ashfar/Documents/BillLess/incoming
+[2026-05-08 14:03:10] INFO     📁 Processing: /Users/ashfar/Documents/BillLess/processing
+[2026-05-08 14:03:10] INFO     📁 Processed:  /Users/ashfar/Documents/BillLess/processed
+[2026-05-08 14:03:10] INFO     📁 Failed:     /Users/ashfar/Documents/BillLess/failed
+[2026-05-08 14:03:10] INFO     📁 Archive:    /Users/ashfar/Documents/BillLess/archive
+[2026-05-08 14:03:10] INFO     🏪 Shop: SHOP001 | Device: DEV001 | Counter: C1
+[2026-05-08 14:03:10] INFO     🗄️  Database initialised
+Unknown property text-overflow
+Unknown property text-overflow
+Unknown property text-overflow
+QSystemTrayIcon::setVisible: No Icon set
+[2026-05-08 14:03:10] INFO     👁️  Watching: /Users/ashfar/Documents/BillLess/incoming
+[2026-05-08 14:03:10] INFO     🔍 No device found – will retry in background
+[2026-05-08 14:03:10] INFO     💓 Heartbeat service started
+[2026-05-08 14:03:10] INFO     ✅ All services running
+[2026-05-08 14:03:10] INFO     📁 Drop PDFs into: /Users/ashfar/Documents/BillLess/incoming
+Unknown property text-overflow
+Unknown property text-overflow
+qt.qpa.fonts: Populating font family aliases took 81 ms. Replace uses of missing font family "SF Mono" with one that exists to avoid this cost. 
+[2026-05-08 14:03:10] WARNING  💔 Heartbeat failed: Connection error
+[2026-05-08 14:42:04] WARNING  💔 Heartbeat failed: Connection error
+[2026-05-08 14:48:14] INFO     🛑 Shutting down…
+[2026-05-08 14:48:19] INFO     👁️  Watcher stopped
+[2026-05-08 14:48:21] INFO     🔌 Device disconnected
+[2026-05-08 14:48:21] INFO     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+[2026-05-08 14:48:21] INFO     🚀 BillLess Agent starting…
+[2026-05-08 14:48:21] INFO     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+[2026-05-08 14:48:21] INFO     Agent version: 2.1.0
+[2026-05-08 14:48:21] INFO     Config version: 4
+[2026-05-08 14:48:21] INFO     🌐 API URL: http://127.0.0.1:8000
+[2026-05-08 14:48:22] INFO     📁 Watch folder OK: /Users/ashfar/Documents/BillLess/incoming
+[2026-05-08 14:48:22] INFO     📁 Incoming:   /Users/ashfar/Documents/BillLess/incoming
+[2026-05-08 14:48:22] INFO     📁 Processing: /Users/ashfar/Documents/BillLess/processing
+[2026-05-08 14:48:22] INFO     📁 Processed:  /Users/ashfar/Documents/BillLess/processed
+[2026-05-08 14:48:22] INFO     📁 Failed:     /Users/ashfar/Documents/BillLess/failed
+[2026-05-08 14:48:22] INFO     📁 Archive:    /Users/ashfar/Documents/BillLess/archive
+[2026-05-08 14:48:22] INFO     🏪 Shop: SHOP001 | Device: DEV001 | Counter: C1
+[2026-05-08 14:48:22] INFO     🗄️  Database initialised
+Unknown property text-overflow
+Unknown property text-overflow
+Unknown property text-overflow
+QSystemTrayIcon::setVisible: No Icon set
+[2026-05-08 14:48:22] INFO     👁️  Watching: /Users/ashfar/Documents/BillLess/incoming
+[2026-05-08 14:48:22] INFO     🔍 No device found – will retry in background
+[2026-05-08 14:48:22] INFO     💓 Heartbeat service started
+[2026-05-08 14:48:22] INFO     ✅ All services running
+[2026-05-08 14:48:22] INFO     📁 Drop PDFs into: /Users/ashfar/Documents/BillLess/incoming
+Unknown property text-overflow
+Unknown property text-overflow
+qt.qpa.fonts: Populating font family aliases took 546 ms. Replace uses of missing font family "SF Mono" with one that exists to avoid this cost. 
+[2026-05-08 14:48:24] WARNING  💔 Heartbeat failed: Connection error
+[2026-05-08 14:48:26] INFO     👁️  Watcher stopped
+[2026-05-08 14:48:28] INFO     🔌 Device disconnected
+[2026-05-08 14:48:33] INFO     🛑 Agent stopped
+[2026-05-08 14:48:33] INFO     🛑 Shutting down…
+[2026-05-08 14:48:38] INFO     🔌 Device disconnected
+[2026-05-08 14:48:39] INFO     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+[2026-05-08 14:48:39] INFO     🚀 BillLess Agent starting…
+[2026-05-08 14:48:39] INFO     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+[2026-05-08 14:48:39] INFO     Agent version: 2.1.0
+[2026-05-08 14:48:39] INFO     Config version: 4
+[2026-05-08 14:48:39] INFO     🌐 API URL: http://127.0.0.1:8000
+[2026-05-08 14:48:39] INFO     📁 Watch folder OK: /Users/ashfar/Documents/BillLess/incoming
+[2026-05-08 14:48:39] INFO     📁 Incoming:   /Users/ashfar/Documents/BillLess/incoming
+[2026-05-08 14:48:39] INFO     📁 Processing: /Users/ashfar/Documents/BillLess/processing
+[2026-05-08 14:48:39] INFO     📁 Processed:  /Users/ashfar/Documents/BillLess/processed
+[2026-05-08 14:48:39] INFO     📁 Failed:     /Users/ashfar/Documents/BillLess/failed
+[2026-05-08 14:48:39] INFO     📁 Archive:    /Users/ashfar/Documents/BillLess/archive
+[2026-05-08 14:48:39] INFO     🏪 Shop: SHOP001 | Device: DEV001 | Counter: C1
+[2026-05-08 14:48:39] INFO     🗄️  Database initialised
+Unknown property text-overflow
+Unknown property text-overflow
+Unknown property text-overflow
+QSystemTrayIcon::setVisible: No Icon set
+[2026-05-08 14:48:39] INFO     👁️  Watching: /Users/ashfar/Documents/BillLess/incoming
+[2026-05-08 14:48:39] INFO     🔍 No device found – will retry in background
+[2026-05-08 14:48:39] INFO     💓 Heartbeat service started
+[2026-05-08 14:48:39] INFO     ✅ All services running
+[2026-05-08 14:48:39] INFO     📁 Drop PDFs into: /Users/ashfar/Documents/BillLess/incoming
+Unknown property text-overflow
+Unknown property text-overflow
+qt.qpa.fonts: Populating font family aliases took 83 ms. Replace uses of missing font family "SF Mono" with one that exists to avoid this cost. 
+[2026-05-08 14:48:39] WARNING  💔 Heartbeat failed: Connection error
+[2026-05-08 14:48:42] INFO     🛑 Shutting down…
+[2026-05-08 14:48:47] INFO     👁️  Watcher stopped
+[2026-05-08 14:48:47] INFO     🔌 Device disconnected
+[2026-05-08 14:48:49] INFO     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+[2026-05-08 14:48:49] INFO     🚀 BillLess Agent starting…
+[2026-05-08 14:48:49] INFO     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+[2026-05-08 14:48:49] INFO     Agent version: 2.1.0
+[2026-05-08 14:48:49] INFO     Config version: 4
+[2026-05-08 14:48:49] INFO     🌐 API URL: http://127.0.0.1:8000
+[2026-05-08 14:48:49] INFO     📁 Watch folder OK: /Users/ashfar/Documents/BillLess/incoming
+[2026-05-08 14:48:49] INFO     📁 Incoming:   /Users/ashfar/Documents/BillLess/incoming
+[2026-05-08 14:48:49] INFO     📁 Processing: /Users/ashfar/Documents/BillLess/processing
+[2026-05-08 14:48:49] INFO     📁 Processed:  /Users/ashfar/Documents/BillLess/processed
+[2026-05-08 14:48:49] INFO     📁 Failed:     /Users/ashfar/Documents/BillLess/failed
+[2026-05-08 14:48:49] INFO     📁 Archive:    /Users/ashfar/Documents/BillLess/archive
+[2026-05-08 14:48:49] INFO     🏪 Shop: SHOP001 | Device: DEV001 | Counter: C1
+[2026-05-08 14:48:49] INFO     🗄️  Database initialised
+Unknown property text-overflow
+Unknown property text-overflow
+Unknown property text-overflow
+QSystemTrayIcon::setVisible: No Icon set
+[2026-05-08 14:48:49] INFO     👁️  Watching: /Users/ashfar/Documents/BillLess/incoming
+[2026-05-08 14:48:49] INFO     🔍 No device found – will retry in background
+[2026-05-08 14:48:49] INFO     💓 Heartbeat service started
+[2026-05-08 14:48:49] INFO     ✅ All services running
+[2026-05-08 14:48:49] INFO     📁 Drop PDFs into: /Users/ashfar/Documents/BillLess/incoming
+Unknown property text-overflow
+Unknown property text-overflow
+qt.qpa.fonts: Populating font family aliases took 81 ms. Replace uses of missing font family "SF Mono" with one that exists to avoid this cost. 
+[2026-05-08 14:48:50] WARNING  💔 Heartbeat failed: Connection error
+[2026-05-08 14:48:54] INFO     👁️  Watcher stopped
+[2026-05-08 14:48:56] INFO     🔌 Device disconnected
+[2026-05-08 14:49:01] INFO     🛑 Agent stopped
+[2026-05-08 14:49:01] INFO     🔌 Device disconnected
+[2026-05-08 14:49:06] INFO     🛑 Agent stopped
+[2026-05-08 14:49:06] INFO     🔌 Device disconnected
+[2026-05-08 14:49:11] INFO     🛑 Agent stopped
+[2026-05-08 14:49:11] INFO     🔌 Device disconnected
+[2026-05-08 14:49:16] INFO     🛑 Agent stopped
+[2026-05-08 14:49:16] INFO     🔌 Device disconnected
+[2026-05-08 14:49:21] INFO     🛑 Agent stopped
+[2026-05-08 18:33:17] INFO     🛑 Shutting down…
+[2026-05-08 18:33:17] INFO     🔌 Device disconnected
+[2026-05-08 18:33:17] INFO     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+[2026-05-08 18:33:17] INFO     🚀 BillLess Agent starting…
+[2026-05-08 18:33:17] INFO     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+[2026-05-08 18:33:17] INFO     Agent version: 2.1.0
+[2026-05-08 18:33:17] INFO     Config version: 4
+[2026-05-08 18:33:17] INFO     🌐 API URL: http://127.0.0.1:8000
+[2026-05-08 18:33:17] INFO     📁 Watch folder OK: /Users/ashfar/Documents/BillLess/incoming
+[2026-05-08 18:33:17] INFO     📁 Incoming:   /Users/ashfar/Documents/BillLess/incoming
+[2026-05-08 18:33:17] INFO     📁 Processing: /Users/ashfar/Documents/BillLess/processing
+[2026-05-08 18:33:17] INFO     📁 Processed:  /Users/ashfar/Documents/BillLess/processed
+[2026-05-08 18:33:17] INFO     📁 Failed:     /Users/ashfar/Documents/BillLess/failed
+[2026-05-08 18:33:17] INFO     📁 Archive:    /Users/ashfar/Documents/BillLess/archive
+[2026-05-08 18:33:17] INFO     🏪 Shop: SHOP001 | Device: DEV001 | Counter: C1
+[2026-05-08 18:33:17] INFO     🗄️  Database initialised
+Unknown property text-overflow
+Unknown property text-overflow
+Unknown property text-overflow
+QSystemTrayIcon::setVisible: No Icon set
+[2026-05-08 18:33:17] INFO     👁️  Watching: /Users/ashfar/Documents/BillLess/incoming
+[2026-05-08 18:33:17] INFO     🔍 No device found – will retry in background
+[2026-05-08 18:33:17] INFO     💓 Heartbeat service started
+[2026-05-08 18:33:17] INFO     ✅ All services running
+[2026-05-08 18:33:17] INFO     📁 Drop PDFs into: /Users/ashfar/Documents/BillLess/incoming
+Unknown property text-overflow
+Unknown property text-overflow
+qt.qpa.fonts: Populating font family aliases took 84 ms. Replace uses of missing font family "SF Mono" with one that exists to avoid this cost. 
+[2026-05-08 18:33:18] WARNING  💔 Heartbeat failed: HTTP 404
+[2026-05-08 18:33:19] INFO     🛑 Shutting down…
+[2026-05-08 18:33:25] INFO     👁️  Watcher stopped
+[2026-05-08 18:33:26] INFO     🔌 Device disconnected
+[2026-05-08 18:33:28] INFO     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+[2026-05-08 18:33:28] INFO     🚀 BillLess Agent starting…
+[2026-05-08 18:33:28] INFO     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+[2026-05-08 18:33:28] INFO     Agent version: 2.1.0
+[2026-05-08 18:33:28] INFO     Config version: 4
+[2026-05-08 18:33:28] INFO     🌐 API URL: http://127.0.0.1:8000
+[2026-05-08 18:33:28] INFO     📁 Watch folder OK: /Users/ashfar/Documents/BillLess/incoming
+[2026-05-08 18:33:28] INFO     📁 Incoming:   /Users/ashfar/Documents/BillLess/incoming
+[2026-05-08 18:33:28] INFO     📁 Processing: /Users/ashfar/Documents/BillLess/processing
+[2026-05-08 18:33:28] INFO     📁 Processed:  /Users/ashfar/Documents/BillLess/processed
+[2026-05-08 18:33:28] INFO     📁 Failed:     /Users/ashfar/Documents/BillLess/failed
+[2026-05-08 18:33:28] INFO     📁 Archive:    /Users/ashfar/Documents/BillLess/archive
+[2026-05-08 18:33:28] INFO     🏪 Shop: SHOP001 | Device: DEV001 | Counter: C1
+[2026-05-08 18:33:28] INFO     🗄️  Database initialised
+Unknown property text-overflow
+Unknown property text-overflow
+Unknown property text-overflow
+QSystemTrayIcon::setVisible: No Icon set
+[2026-05-08 18:33:28] INFO     👁️  Watching: /Users/ashfar/Documents/BillLess/incoming
+[2026-05-08 18:33:28] INFO     🔍 No device found – will retry in background
+[2026-05-08 18:33:28] INFO     💓 Heartbeat service started
+[2026-05-08 18:33:28] INFO     ✅ All services running
+[2026-05-08 18:33:28] INFO     📁 Drop PDFs into: /Users/ashfar/Documents/BillLess/incoming
+Unknown property text-overflow
+Unknown property text-overflow
+qt.qpa.fonts: Populating font family aliases took 81 ms. Replace uses of missing font family "SF Mono" with one that exists to avoid this cost. 
+[2026-05-08 18:33:28] WARNING  💔 Heartbeat failed: HTTP 404
+[2026-05-08 18:34:28] WARNING  💔 Heartbeat failed: HTTP 404
+[2026-05-08 18:35:29] WARNING  💔 Heartbeat failed: HTTP 404
+[2026-05-08 18:36:29] ERROR    ❌ Backend appears offline (4 consecutive failures). Will keep trying silently.
+[2026-05-08 21:52:57] INFO     🛑 Shutting down…
+[2026-05-08 21:53:02] INFO     👁️  Watcher stopped
+[2026-05-08 21:53:03] INFO     🔌 Device disconnected
+[2026-05-08 21:53:03] INFO     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+[2026-05-08 21:53:03] INFO     🚀 BillLess Agent starting…
+[2026-05-08 21:53:03] INFO     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+[2026-05-08 21:53:03] INFO     Agent version: 2.1.0
+[2026-05-08 21:53:03] INFO     Config version: 4
+[2026-05-08 21:53:03] INFO     🌐 API URL: http://127.0.0.1:8000
+[2026-05-08 21:53:03] INFO     📁 Watch folder OK: /Users/ashfar/Documents/BillLess/incoming
+[2026-05-08 21:53:03] INFO     📁 Incoming:   /Users/ashfar/Documents/BillLess/incoming
+[2026-05-08 21:53:03] INFO     📁 Processing: /Users/ashfar/Documents/BillLess/processing
+[2026-05-08 21:53:03] INFO     📁 Processed:  /Users/ashfar/Documents/BillLess/processed
+[2026-05-08 21:53:03] INFO     📁 Failed:     /Users/ashfar/Documents/BillLess/failed
+[2026-05-08 21:53:03] INFO     📁 Archive:    /Users/ashfar/Documents/BillLess/archive
+[2026-05-08 21:53:03] INFO     🏪 Shop: SHOP001 | Device: DEV001 | Counter: C1
+[2026-05-08 21:53:03] INFO     🗄️  Database initialised
+Unknown property text-overflow
+Unknown property text-overflow
+Unknown property text-overflow
+QSystemTrayIcon::setVisible: No Icon set
+[2026-05-08 21:53:03] INFO     👁️  Watching: /Users/ashfar/Documents/BillLess/incoming
+[2026-05-08 21:53:03] INFO     🔍 No device found – will retry in background
+[2026-05-08 21:53:03] INFO     💓 Heartbeat service started
+[2026-05-08 21:53:03] INFO     ✅ All services running
+[2026-05-08 21:53:03] INFO     📁 Drop PDFs into: /Users/ashfar/Documents/BillLess/incoming
+Unknown property text-overflow
+Unknown property text-overflow
+qt.qpa.fonts: Populating font family aliases took 90 ms. Replace uses of missing font family "SF Mono" with one that exists to avoid this cost. 
+[2026-05-08 21:53:04] WARNING  💔 Heartbeat failed: HTTP 404
+[2026-05-08 21:54:04] WARNING  💔 Heartbeat failed: HTTP 404
+[2026-05-08 21:55:04] WARNING  💔 Heartbeat failed: HTTP 404
+[2026-05-08 21:56:04] ERROR    ❌ Backend appears offline (4 consecutive failures). Will keep trying silently.
+[2026-05-09 12:44:14] WARNING  💔 Heartbeat failed: Connection error
+[2026-05-09 12:45:14] WARNING  💔 Heartbeat failed: Connection error
+[2026-05-09 12:46:14] WARNING  💔 Heartbeat failed: Connection error
+[2026-05-09 13:33:19] WARNING  💔 Heartbeat failed: Connection error
+[2026-05-09 13:34:19] WARNING  💔 Heartbeat failed: Connection error
+[2026-05-09 13:35:19] WARNING  💔 Heartbeat failed: Connection error
+[2026-05-09 13:36:19] ERROR    ❌ Backend appears offline (4 consecutive failures). Will keep trying silently.
+[2026-05-09 19:27:25] WARNING  💔 Heartbeat failed: Connection error
+[2026-05-09 20:42:31] WARNING  💔 Heartbeat failed: Connection error
+[2026-05-09 20:43:31] WARNING  💔 Heartbeat failed: Connection error
+[2026-05-09 20:44:31] WARNING  💔 Heartbeat failed: Connection error
+[2026-05-09 20:45:31] ERROR    ❌ Backend appears offline (4 consecutive failures). Will keep trying silently.
+[2026-05-10 23:12:26] WARNING  💔 Heartbeat failed: Connection error
+[2026-05-10 23:13:15] INFO     🛑 Shutting down…
+[2026-05-10 23:13:20] INFO     👁️  Watcher stopped
+[2026-05-10 23:13:22] INFO     🔌 Device disconnected
+[2026-05-11 11:27:14] INFO     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+[2026-05-11 11:27:14] INFO     🚀 BillLess Agent starting…
+[2026-05-11 11:27:14] INFO     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+[2026-05-11 11:27:14] INFO     Agent version: 2.1.0
+[2026-05-11 11:27:14] INFO     Config version: 4
+[2026-05-11 11:27:14] INFO     🌐 API URL: http://127.0.0.1:8000
+[2026-05-11 11:27:14] INFO     📁 Watch folder OK: /Users/ashfar/Documents/BillLess/incoming
+[2026-05-11 11:27:14] INFO     📁 Incoming:   /Users/ashfar/Documents/BillLess/incoming
+[2026-05-11 11:27:14] INFO     📁 Processing: /Users/ashfar/Documents/BillLess/processing
+[2026-05-11 11:27:14] INFO     📁 Processed:  /Users/ashfar/Documents/BillLess/processed
+[2026-05-11 11:27:14] INFO     📁 Failed:     /Users/ashfar/Documents/BillLess/failed
+[2026-05-11 11:27:14] INFO     📁 Archive:    /Users/ashfar/Documents/BillLess/archive
+[2026-05-11 11:27:14] INFO     🏪 Shop: SHOP001 | Device: DEV001 | Counter: C1
+[2026-05-11 11:27:14] INFO     🗄️  Database initialised
+Unknown property text-overflow
+Unknown property text-overflow
+Unknown property text-overflow
+QSystemTrayIcon::setVisible: No Icon set
+[2026-05-11 11:27:14] INFO     👁️  Watching: /Users/ashfar/Documents/BillLess/incoming
+[2026-05-11 11:27:14] INFO     🔍 No device found – will retry in background
+[2026-05-11 11:27:14] INFO     💓 Heartbeat service started
+[2026-05-11 11:27:14] INFO     ✅ All services running
+[2026-05-11 11:27:14] INFO     📁 Drop PDFs into: /Users/ashfar/Documents/BillLess/incoming
+Unknown property text-overflow
+Unknown property text-overflow
+qt.qpa.fonts: Populating font family aliases took 180 ms. Replace uses of missing font family "SF Mono" with one that exists to avoid this cost. 
+[2026-05-11 11:27:15] WARNING  💔 Heartbeat failed: Connection error
+[2026-05-11 11:28:00] INFO     👁️  Watcher stopped
+[2026-05-11 11:28:01] INFO     🔌 Device disconnected
+[2026-05-11 11:28:06] INFO     🛑 Agent stopped
+[2026-05-12 12:12:37] INFO     🔌 Device disconnected
+[2026-05-12 12:12:37] INFO     🛑 Agent stopped
+[2026-05-12 18:18:19] INFO     🛑 Shutting down…
+[2026-05-12 18:18:19] INFO     🔌 Device disconnected
+[2026-05-12 18:18:20] INFO     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+[2026-05-12 18:18:20] INFO     🚀 BillLess Agent starting…
+[2026-05-12 18:18:20] INFO     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+[2026-05-12 18:18:20] INFO     Agent version: 2.1.0
+[2026-05-12 18:18:20] INFO     Config version: 4
+[2026-05-12 18:18:20] INFO     🌐 API URL: http://127.0.0.1:8000
+[2026-05-12 18:18:20] INFO     📁 Watch folder OK: /Users/ashfar/Documents/BillLess/incoming
+[2026-05-12 18:18:20] INFO     📁 Incoming:   /Users/ashfar/Documents/BillLess/incoming
+[2026-05-12 18:18:20] INFO     📁 Processing: /Users/ashfar/Documents/BillLess/processing
+[2026-05-12 18:18:20] INFO     📁 Processed:  /Users/ashfar/Documents/BillLess/processed
+[2026-05-12 18:18:20] INFO     📁 Failed:     /Users/ashfar/Documents/BillLess/failed
+[2026-05-12 18:18:20] INFO     📁 Archive:    /Users/ashfar/Documents/BillLess/archive
+[2026-05-12 18:18:20] INFO     🏪 Shop: SHOP001 | Device: DEV001 | Counter: C1
+[2026-05-12 18:18:20] INFO     🗄️  Database initialised
+Unknown property text-overflow
+Unknown property text-overflow
+Unknown property text-overflow
+QSystemTrayIcon::setVisible: No Icon set
+[2026-05-12 18:18:20] INFO     👁️  Watching: /Users/ashfar/Documents/BillLess/incoming
+[2026-05-12 18:18:20] INFO     🔍 No device found – will retry in background
+[2026-05-12 18:18:20] INFO     💓 Heartbeat service started
+[2026-05-12 18:18:20] INFO     ✅ All services running
+[2026-05-12 18:18:20] INFO     📁 Drop PDFs into: /Users/ashfar/Documents/BillLess/incoming
+Unknown property text-overflow
+Unknown property text-overflow
+qt.qpa.fonts: Populating font family aliases took 118 ms. Replace uses of missing font family "SF Mono" with one that exists to avoid this cost. 
+[2026-05-12 18:18:20] WARNING  💔 Heartbeat failed: Connection error
+[2026-05-12 18:18:44] INFO     🛑 Shutting down…
+[2026-05-12 18:18:49] INFO     👁️  Watcher stopped
+[2026-05-12 18:18:51] INFO     🔌 Device disconnected
+[2026-05-12 20:14:15] INFO     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+[2026-05-12 20:14:15] INFO     🚀 BillLess Agent starting…
+[2026-05-12 20:14:15] INFO     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+[2026-05-12 20:14:15] INFO     Agent version: 2.1.0
+[2026-05-12 20:14:15] INFO     Config version: 4
+[2026-05-12 20:14:15] INFO     🌐 API URL: http://127.0.0.1:8000
+[2026-05-12 20:14:15] INFO     📁 Watch folder OK: /Users/ashfar/Documents/BillLess/incoming
+[2026-05-12 20:14:15] INFO     📁 Incoming:   /Users/ashfar/Documents/BillLess/incoming
+[2026-05-12 20:14:15] INFO     📁 Processing: /Users/ashfar/Documents/BillLess/processing
+[2026-05-12 20:14:15] INFO     📁 Processed:  /Users/ashfar/Documents/BillLess/processed
+[2026-05-12 20:14:15] INFO     📁 Failed:     /Users/ashfar/Documents/BillLess/failed
+[2026-05-12 20:14:15] INFO     📁 Archive:    /Users/ashfar/Documents/BillLess/archive
+[2026-05-12 20:14:15] INFO     🏪 Shop: SHOP001 | Device: DEV001 | Counter: C1
+[2026-05-12 20:14:15] INFO     🗄️  Database initialised
+Unknown property text-overflow
+Unknown property text-overflow
+Unknown property text-overflow
+QSystemTrayIcon::setVisible: No Icon set
+[2026-05-12 20:14:16] INFO     👁️  Watching: /Users/ashfar/Documents/BillLess/incoming
+[2026-05-12 20:14:16] INFO     🔍 No device found – will retry in background
+[2026-05-12 20:14:16] INFO     💓 Heartbeat service started
+[2026-05-12 20:14:16] INFO     ✅ All services running
+[2026-05-12 20:14:16] INFO     📁 Drop PDFs into: /Users/ashfar/Documents/BillLess/incoming
+Unknown property text-overflow
+Unknown property text-overflow
+qt.qpa.fonts: Populating font family aliases took 384 ms. Replace uses of missing font family "SF Mono" with one that exists to avoid this cost. 
+[2026-05-12 20:14:16] WARNING  💔 Heartbeat failed: Connection error
+[2026-05-12 20:15:17] WARNING  💔 Heartbeat failed: Connection error
+[2026-05-12 20:16:17] WARNING  💔 Heartbeat failed: Connection error
+[2026-05-12 20:17:17] ERROR    ❌ Backend appears offline (4 consecutive failures). Will keep trying silently.
+[2026-05-17 11:46:11] WARNING  💔 Heartbeat failed: Connection error
+[2026-05-17 11:47:12] WARNING  💔 Heartbeat failed: Connection error
+[2026-05-17 11:48:12] WARNING  💔 Heartbeat failed: Connection error
+[2026-05-17 11:49:12] ERROR    ❌ Backend appears offline (4 consecutive failures). Will keep trying silently.

@@ -1,0 +1,613 @@
+[2026-05-06 12:23:13] INFO     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+[2026-05-06 12:23:13] INFO     🚀 BillLess Agent starting…
+[2026-05-06 12:23:13] INFO     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+[2026-05-06 12:23:13] INFO     Agent version: 2.0.0
+[2026-05-06 12:23:13] INFO     Config version: 3
+[2026-05-06 12:23:13] INFO     📁 Watch folder OK: /Users/ashfar/Documents/Bills
+[2026-05-06 12:23:13] WARNING  ⚠️  No API key configured – uploads will fail
+[2026-05-06 12:23:13] WARNING  ⚠️  No shop_id configured
+[2026-05-06 12:23:13] INFO     🗄️  Database initialised
+[2026-05-06 12:23:13] INFO     ✅ macOS LaunchAgent installed: /Users/ashfar/Library/LaunchAgents/io.billless.agent.plist
+[2026-05-06 12:23:13] INFO        Will auto-start on next login.
+[2026-05-06 12:23:13] INFO     🔐 Device secret: 6de069e2…
+[2026-05-06 12:23:16] INFO     👁️  Watching folder: /Users/ashfar/Documents/Bills
+[2026-05-06 12:23:16] INFO     🔍 No device found – will retry in background
+[2026-05-06 12:23:16] INFO     💓 Heartbeat service started
+[2026-05-06 12:23:16] INFO     📊 Telemetry service started
+[2026-05-06 12:23:16] INFO     ✅ All services initialised
+[2026-05-06 12:23:16] WARNING  💔 Heartbeat failed: Connection error
+[2026-05-06 12:23:30] INFO     🔍 No device found – will retry in background
+[2026-05-06 12:23:30] INFO     💓 Heartbeat service started
+[2026-05-06 12:23:30] INFO     🚀 Agent started
+[2026-05-06 12:23:30] WARNING  💔 Heartbeat failed: Connection error
+[2026-05-06 12:23:32] INFO     🔍 No device found – will retry in background
+[2026-05-06 12:23:32] INFO     💓 Heartbeat service started
+[2026-05-06 12:23:32] INFO     🚀 Agent started
+[2026-05-06 12:23:32] WARNING  💔 Heartbeat failed: Connection error
+[2026-05-06 12:24:16] ERROR    ❌ Backend appears offline (4 consecutive failures). Will keep trying silently.
+[2026-05-06 12:45:12] INFO     📄 New bill detected: Odoo POS.pdf
+[2026-05-06 12:45:12] INFO     📤 Queued: Odoo POS.pdf (135.3 KB)
+[2026-05-06 12:45:13] WARNING  🔌 Connection error (attempt 1/3)
+[2026-05-06 12:45:13] DEBUG    ⏳ Retrying in 2.3s…
+[2026-05-06 12:45:16] WARNING  🔌 Connection error (attempt 2/3)
+[2026-05-06 12:45:16] DEBUG    ⏳ Retrying in 4.8s…
+[2026-05-06 12:45:21] WARNING  🔌 Connection error (attempt 3/3)
+[2026-05-06 12:45:21] ERROR    ❌ Failed after 3 attempts: /Users/ashfar/Documents/Bills/Odoo POS.pdf
+[2026-05-06 12:45:57] INFO     🔍 No device found – will retry in background
+[2026-05-06 12:45:57] INFO     💓 Heartbeat service started
+[2026-05-06 12:45:57] INFO     🚀 Agent started
+[2026-05-06 12:46:02] INFO     🔍 No device found – will retry in background
+[2026-05-06 12:46:02] INFO     💓 Heartbeat service started
+[2026-05-06 12:46:02] INFO     🚀 Agent started
+[2026-05-06 13:06:44] INFO     🔍 No device found – will retry in background
+[2026-05-06 13:06:44] INFO     💓 Heartbeat service started
+[2026-05-06 13:06:44] INFO     🚀 Agent started
+[2026-05-06 13:07:09] INFO     🔍 No device found – will retry in background
+[2026-05-06 13:07:09] INFO     💓 Heartbeat service started
+[2026-05-06 13:07:09] INFO     🚀 Agent started
+[2026-05-06 13:07:11] INFO     👁️  Watcher stopped
+[2026-05-06 13:07:12] INFO     🔌 Device disconnected
+[2026-05-06 13:07:17] INFO     🛑 Agent stopped
+[2026-05-06 13:07:21] INFO     🔌 Device disconnected
+[2026-05-06 13:07:26] INFO     🛑 Agent stopped
+[2026-05-06 13:07:40] INFO     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+[2026-05-06 13:07:40] INFO     🚀 BillLess Agent starting…
+[2026-05-06 13:07:40] INFO     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+[2026-05-06 13:07:40] INFO     Agent version: 2.0.0
+[2026-05-06 13:07:40] INFO     Config version: 3
+[2026-05-06 13:07:40] INFO     📁 Watch folder OK: /Users/ashfar/Documents/Bills
+[2026-05-06 13:07:40] WARNING  ⚠️  No API key configured – uploads will fail
+[2026-05-06 13:07:40] WARNING  ⚠️  No shop_id configured
+[2026-05-06 13:07:40] INFO     🗄️  Database initialised
+[2026-05-06 13:07:40] INFO     ✅ macOS LaunchAgent installed: /Users/ashfar/Library/LaunchAgents/io.billless.agent.plist
+[2026-05-06 13:07:40] INFO        Will auto-start on next login.
+[2026-05-06 13:07:40] INFO     🔐 Device secret: 6de069e2…
+[2026-05-06 13:07:40] INFO     👁️  Watching folder: /Users/ashfar/Documents/Bills
+[2026-05-06 13:07:40] INFO     🔍 No device found – will retry in background
+[2026-05-06 13:07:40] INFO     💓 Heartbeat service started
+[2026-05-06 13:07:40] INFO     📊 Telemetry service started
+[2026-05-06 13:07:40] INFO     ✅ All services initialised
+[2026-05-06 13:07:40] WARNING  🔌 Connection error (attempt 1/3)
+[2026-05-06 13:07:40] DEBUG    ⏳ Retrying in 2.2s…
+[2026-05-06 13:07:40] WARNING  💔 Heartbeat failed: Connection error
+[2026-05-06 13:07:43] WARNING  🔌 Connection error (attempt 2/3)
+[2026-05-06 13:07:43] DEBUG    ⏳ Retrying in 4.5s…
+[2026-05-06 13:07:47] WARNING  🔌 Connection error (attempt 3/3)
+[2026-05-06 13:07:47] ERROR    ❌ Failed after 3 attempts: /Users/ashfar/Documents/Bills/Odoo POS.pdf
+[2026-05-06 13:08:09] INFO     📄 New bill detected: 11.pdf
+[2026-05-06 13:08:09] INFO     📤 Queued: 11.pdf (135.3 KB)
+[2026-05-06 13:08:09] WARNING  🔌 Connection error (attempt 1/3)
+[2026-05-06 13:08:09] DEBUG    ⏳ Retrying in 2.2s…
+[2026-05-06 13:08:11] WARNING  🔌 Connection error (attempt 2/3)
+[2026-05-06 13:08:11] DEBUG    ⏳ Retrying in 4.6s…
+[2026-05-06 13:08:16] WARNING  🔌 Connection error (attempt 3/3)
+[2026-05-06 13:08:16] ERROR    ❌ Failed after 3 attempts: /Users/ashfar/Documents/Bills/11.pdf
+[2026-05-06 13:08:40] WARNING  💔 Heartbeat failed: Connection error
+[2026-05-06 13:09:40] WARNING  💔 Heartbeat failed: Connection error
+[2026-05-06 13:10:29] INFO     📄 New bill detected: test-12.pdf
+[2026-05-06 13:10:29] INFO     📤 Queued: test-12.pdf (129.7 KB)
+[2026-05-06 13:10:30] WARNING  🔌 Connection error (attempt 1/3)
+[2026-05-06 13:10:30] DEBUG    ⏳ Retrying in 2.5s…
+[2026-05-06 13:10:33] WARNING  🔌 Connection error (attempt 2/3)
+[2026-05-06 13:10:33] DEBUG    ⏳ Retrying in 5.0s…
+[2026-05-06 13:10:38] WARNING  🔌 Connection error (attempt 3/3)
+[2026-05-06 13:10:38] ERROR    ❌ Failed after 3 attempts: /Users/ashfar/Documents/Bills/test-12.pdf
+[2026-05-06 13:10:40] ERROR    ❌ Backend appears offline (4 consecutive failures). Will keep trying silently.
+[2026-05-06 13:16:14] INFO     📄 New bill detected: test-upload-verify.pdf
+[2026-05-06 13:16:14] INFO     📤 Queued: test-upload-verify.pdf (56.0 B)
+[2026-05-06 13:16:16] WARNING  ⚠️  HTTP 401 (attempt 1/3): {"detail":"Invalid token header. No credentials provided."}
+[2026-05-06 13:16:16] DEBUG    ⏳ Retrying in 2.5s…
+[2026-05-06 13:16:19] WARNING  ⚠️  HTTP 401 (attempt 2/3): {"detail":"Invalid token header. No credentials provided."}
+[2026-05-06 13:16:19] DEBUG    ⏳ Retrying in 4.1s…
+[2026-05-06 13:16:23] WARNING  ⚠️  HTTP 401 (attempt 3/3): {"detail":"Invalid token header. No credentials provided."}
+[2026-05-06 13:16:23] ERROR    ❌ Failed after 3 attempts: /Users/ashfar/Documents/Bills/test-upload-verify.pdf
+[2026-05-06 13:16:59] INFO     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+[2026-05-06 13:16:59] INFO     🚀 BillLess Agent starting…
+[2026-05-06 13:16:59] INFO     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+[2026-05-06 13:16:59] INFO     Agent version: 2.0.0
+[2026-05-06 13:16:59] INFO     Config version: 3
+[2026-05-06 13:16:59] INFO     📁 Watch folder OK: /Users/ashfar/Documents/Bills
+[2026-05-06 13:16:59] WARNING  ⚠️  No API key configured – uploads will fail
+[2026-05-06 13:16:59] INFO     📱 Device ID: DEV001
+[2026-05-06 13:16:59] INFO     🔢 Counter ID: C1
+[2026-05-06 13:16:59] INFO     🗄️  Database initialised
+[2026-05-06 13:16:59] INFO     🔐 Device secret: 6de069e2…
+[2026-05-06 13:16:59] INFO     👁️  Watching folder: /Users/ashfar/Documents/Bills
+[2026-05-06 13:16:59] INFO     ================================
+[2026-05-06 13:16:59] INFO     📡 UPLOAD URL: http://127.0.0.1:8000/api/bills/upload/
+[2026-05-06 13:16:59] INFO        API BASE:   http://127.0.0.1:8000
+[2026-05-06 13:16:59] INFO        HTTPS REQ:  False
+[2026-05-06 13:16:59] INFO        SHOP:       SHOP001
+[2026-05-06 13:16:59] INFO        DEVICE:     DEV001
+[2026-05-06 13:16:59] INFO     ================================
+[2026-05-06 13:16:59] INFO     🔍 No device found – will retry in background
+[2026-05-06 13:16:59] INFO     💓 Heartbeat service started
+[2026-05-06 13:16:59] INFO     📊 Telemetry service started
+[2026-05-06 13:16:59] INFO     ✅ All services initialised
+[2026-05-06 13:17:00] WARNING  ⚠️  HTTP 401 (attempt 1/3): {"detail":"Invalid token header. No credentials provided."}
+[2026-05-06 13:17:00] DEBUG    ⏳ Retrying in 2.5s…
+[2026-05-06 13:17:00] WARNING  💔 Heartbeat failed: HTTP 401
+[2026-05-06 13:17:02] WARNING  ⚠️  HTTP 401 (attempt 2/3): {"detail":"Invalid token header. No credentials provided."}
+[2026-05-06 13:17:02] DEBUG    ⏳ Retrying in 4.7s…
+[2026-05-06 13:17:07] WARNING  ⚠️  HTTP 401 (attempt 3/3): {"detail":"Invalid token header. No credentials provided."}
+[2026-05-06 13:17:07] ERROR    ❌ Failed after 3 attempts: /Users/ashfar/Documents/Bills/Odoo POS.pdf
+[2026-05-06 13:17:07] INFO     ================================
+[2026-05-06 13:17:07] INFO     📡 UPLOAD URL: http://127.0.0.1:8000/api/bills/upload/
+[2026-05-06 13:17:07] INFO        API BASE:   http://127.0.0.1:8000
+[2026-05-06 13:17:07] INFO        HTTPS REQ:  False
+[2026-05-06 13:17:07] INFO        SHOP:       SHOP001
+[2026-05-06 13:17:07] INFO        DEVICE:     DEV001
+[2026-05-06 13:17:07] INFO     ================================
+[2026-05-06 13:17:07] WARNING  ⚠️  HTTP 401 (attempt 1/3): {"detail":"Invalid token header. No credentials provided."}
+[2026-05-06 13:17:07] DEBUG    ⏳ Retrying in 2.5s…
+[2026-05-06 13:17:09] WARNING  ⚠️  HTTP 401 (attempt 2/3): {"detail":"Invalid token header. No credentials provided."}
+[2026-05-06 13:17:09] DEBUG    ⏳ Retrying in 5.1s…
+[2026-05-06 13:17:14] WARNING  ⚠️  HTTP 401 (attempt 3/3): {"detail":"Invalid token header. No credentials provided."}
+[2026-05-06 13:17:14] ERROR    ❌ Failed after 3 attempts: /Users/ashfar/Documents/Bills/11.pdf
+[2026-05-06 13:17:14] INFO     ================================
+[2026-05-06 13:17:14] INFO     📡 UPLOAD URL: http://127.0.0.1:8000/api/bills/upload/
+[2026-05-06 13:17:14] INFO        API BASE:   http://127.0.0.1:8000
+[2026-05-06 13:17:14] INFO        HTTPS REQ:  False
+[2026-05-06 13:17:14] INFO        SHOP:       SHOP001
+[2026-05-06 13:17:14] INFO        DEVICE:     DEV001
+[2026-05-06 13:17:14] INFO     ================================
+[2026-05-06 13:17:14] WARNING  ⚠️  HTTP 401 (attempt 1/3): {"detail":"Invalid token header. No credentials provided."}
+[2026-05-06 13:17:14] DEBUG    ⏳ Retrying in 2.5s…
+[2026-05-06 13:17:17] WARNING  ⚠️  HTTP 401 (attempt 2/3): {"detail":"Invalid token header. No credentials provided."}
+[2026-05-06 13:17:17] DEBUG    ⏳ Retrying in 4.5s…
+[2026-05-06 13:17:21] WARNING  ⚠️  HTTP 401 (attempt 3/3): {"detail":"Invalid token header. No credentials provided."}
+[2026-05-06 13:17:21] ERROR    ❌ Failed after 3 attempts: /Users/ashfar/Documents/Bills/test-12.pdf
+[2026-05-06 13:17:21] INFO     ================================
+[2026-05-06 13:17:21] INFO     📡 UPLOAD URL: http://127.0.0.1:8000/api/bills/upload/
+[2026-05-06 13:17:21] INFO        API BASE:   http://127.0.0.1:8000
+[2026-05-06 13:17:21] INFO        HTTPS REQ:  False
+[2026-05-06 13:17:21] INFO        SHOP:       SHOP001
+[2026-05-06 13:17:21] INFO        DEVICE:     DEV001
+[2026-05-06 13:17:21] INFO     ================================
+[2026-05-06 13:17:21] WARNING  ⚠️  File missing, skipping: /Users/ashfar/Documents/Bills/test-upload-verify.pdf
+[2026-05-06 13:18:00] WARNING  💔 Heartbeat failed: HTTP 401
+[2026-05-06 13:19:00] INFO     ✅ Uploader re-enabled
+[2026-05-06 13:19:09] INFO     🔍 No device found – will retry in background
+[2026-05-06 13:19:09] INFO     💓 Heartbeat service started
+[2026-05-06 13:19:09] INFO     🚀 Agent started
+[2026-05-06 13:19:09] INFO     ✅ Uploader re-enabled
+[2026-05-06 13:19:36] INFO     📄 New bill detected: 1233.pdf
+[2026-05-06 13:19:36] INFO     📤 Queued: 1233.pdf (129.7 KB)
+[2026-05-06 13:19:38] INFO     ================================
+[2026-05-06 13:19:38] INFO     📡 UPLOAD URL: http://127.0.0.1:8000/api/bills/upload/
+[2026-05-06 13:19:38] INFO        API BASE:   http://127.0.0.1:8000
+[2026-05-06 13:19:38] INFO        HTTPS REQ:  False
+[2026-05-06 13:19:38] INFO        SHOP:       SHOP001
+[2026-05-06 13:19:38] INFO        DEVICE:     DEV001
+[2026-05-06 13:19:38] INFO     ================================
+[2026-05-06 13:19:38] INFO     ✅ Uploaded: 1233.pdf (attempt 1)
+[2026-05-06 13:19:38] DEBUG    📦 Moved: 1233.pdf → processed/
+[2026-05-06 13:20:00] INFO     ✅ Uploader re-enabled
+[2026-05-06 13:20:09] INFO     ✅ Uploader re-enabled
+[2026-05-06 13:21:00] INFO     ✅ Uploader re-enabled
+[2026-05-06 13:21:09] INFO     ✅ Uploader re-enabled
+[2026-05-06 13:22:00] INFO     ✅ Uploader re-enabled
+[2026-05-06 13:22:09] INFO     ✅ Uploader re-enabled
+[2026-05-06 13:22:29] DEBUG    📊 Telemetry report sent
+[2026-05-06 13:23:00] INFO     ✅ Uploader re-enabled
+[2026-05-06 13:23:09] INFO     ✅ Uploader re-enabled
+[2026-05-06 13:24:00] INFO     ✅ Uploader re-enabled
+[2026-05-06 13:24:09] INFO     ✅ Uploader re-enabled
+[2026-05-06 13:25:00] INFO     ✅ Uploader re-enabled
+[2026-05-06 13:25:09] INFO     ✅ Uploader re-enabled
+[2026-05-06 13:26:00] INFO     ✅ Uploader re-enabled
+[2026-05-06 13:26:09] INFO     ✅ Uploader re-enabled
+[2026-05-06 13:27:00] INFO     ✅ Uploader re-enabled
+[2026-05-06 13:27:09] INFO     ✅ Uploader re-enabled
+[2026-05-06 13:27:29] DEBUG    📊 Telemetry report sent
+[2026-05-06 13:28:00] INFO     ✅ Uploader re-enabled
+[2026-05-06 13:28:09] INFO     ✅ Uploader re-enabled
+[2026-05-06 13:29:00] INFO     ✅ Uploader re-enabled
+[2026-05-06 13:29:09] INFO     ✅ Uploader re-enabled
+[2026-05-06 13:30:00] INFO     ✅ Uploader re-enabled
+[2026-05-06 13:30:09] INFO     ✅ Uploader re-enabled
+[2026-05-06 13:31:00] INFO     ✅ Uploader re-enabled
+[2026-05-06 13:31:09] INFO     ✅ Uploader re-enabled
+[2026-05-06 13:32:00] INFO     ✅ Uploader re-enabled
+[2026-05-06 13:32:09] INFO     ✅ Uploader re-enabled
+[2026-05-06 13:32:29] DEBUG    📊 Telemetry report sent
+[2026-05-06 13:33:00] INFO     ✅ Uploader re-enabled
+[2026-05-06 13:33:09] INFO     ✅ Uploader re-enabled
+[2026-05-06 13:34:00] INFO     ✅ Uploader re-enabled
+[2026-05-06 13:34:09] INFO     ✅ Uploader re-enabled
+[2026-05-06 13:35:00] INFO     ✅ Uploader re-enabled
+[2026-05-06 13:35:09] INFO     ✅ Uploader re-enabled
+[2026-05-06 13:36:00] INFO     ✅ Uploader re-enabled
+[2026-05-06 13:36:09] INFO     ✅ Uploader re-enabled
+[2026-05-06 13:37:00] INFO     ✅ Uploader re-enabled
+[2026-05-06 13:37:09] INFO     ✅ Uploader re-enabled
+[2026-05-06 13:37:29] DEBUG    📊 Telemetry report sent
+[2026-05-06 13:38:00] INFO     ✅ Uploader re-enabled
+[2026-05-06 13:38:09] INFO     ✅ Uploader re-enabled
+[2026-05-06 13:39:00] INFO     ✅ Uploader re-enabled
+[2026-05-06 13:39:09] INFO     ✅ Uploader re-enabled
+[2026-05-06 13:40:00] INFO     ✅ Uploader re-enabled
+[2026-05-06 13:40:09] INFO     ✅ Uploader re-enabled
+[2026-05-06 13:41:00] INFO     ✅ Uploader re-enabled
+[2026-05-06 13:41:09] INFO     ✅ Uploader re-enabled
+[2026-05-06 13:42:00] INFO     ✅ Uploader re-enabled
+[2026-05-06 13:42:09] INFO     ✅ Uploader re-enabled
+[2026-05-06 13:42:29] DEBUG    📊 Telemetry report sent
+[2026-05-06 13:43:00] INFO     ✅ Uploader re-enabled
+[2026-05-06 13:43:09] INFO     ✅ Uploader re-enabled
+[2026-05-06 13:44:00] INFO     ✅ Uploader re-enabled
+[2026-05-06 13:44:09] INFO     ✅ Uploader re-enabled
+[2026-05-06 13:45:00] INFO     ✅ Uploader re-enabled
+[2026-05-06 13:45:09] INFO     ✅ Uploader re-enabled
+[2026-05-06 13:46:00] INFO     ✅ Uploader re-enabled
+[2026-05-06 13:46:09] INFO     ✅ Uploader re-enabled
+[2026-05-06 13:47:00] INFO     ✅ Uploader re-enabled
+[2026-05-06 13:47:09] INFO     ✅ Uploader re-enabled
+[2026-05-06 13:47:29] DEBUG    📊 Telemetry report sent
+[2026-05-06 13:48:00] INFO     ✅ Uploader re-enabled
+[2026-05-06 13:48:09] INFO     ✅ Uploader re-enabled
+[2026-05-06 13:49:00] WARNING  💔 Heartbeat failed: Connection error
+[2026-05-06 13:49:09] INFO     ✅ Uploader re-enabled
+[2026-05-06 13:50:00] INFO     ✅ Uploader re-enabled
+[2026-05-06 13:50:09] INFO     ✅ Uploader re-enabled
+[2026-05-06 13:50:39] INFO     📄 New file detected: test-receipt-001.pdf
+[2026-05-06 13:50:39] INFO     📂 Moved to processing: test-receipt-001.pdf → SHOP001_DEV001_C1_20260506_135039_test-receipt-001.pdf
+[2026-05-06 13:50:39] INFO     📝 Renamed: test-receipt-001.pdf → SHOP001_DEV001_C1_20260506_135039_test-receipt-001.pdf
+[2026-05-06 13:50:39] INFO     📤 Queued for upload: SHOP001_DEV001_C1_20260506_135039_test-receipt-001.pdf (55.0 B)
+[2026-05-06 13:50:39] INFO     📡 Uploading: SHOP001_DEV001_C1_20260506_135039_test-receipt-001.pdf
+[2026-05-06 13:50:39] INFO     📡 Upload URL: http://127.0.0.1:8000/api/bills/upload/
+[2026-05-06 13:50:39] INFO     ✅ Server responded 201 (attempt 1)
+[2026-05-06 13:50:39] INFO     📦 Moved to processed: SHOP001_DEV001_C1_20260506_135039_test-receipt-001.pdf
+[2026-05-06 13:50:39] INFO     ✅ Upload successful: SHOP001_DEV001_C1_20260506_135039_test-receipt-001.pdf → moved to processed/
+[2026-05-06 13:51:00] INFO     ✅ Uploader re-enabled
+[2026-05-06 13:51:09] INFO     ✅ Uploader re-enabled
+[2026-05-06 13:51:13] INFO     📄 New file detected: test-receipt-001-copy.pdf
+[2026-05-06 13:51:13] INFO     ⏭️  Duplicate skipped: test-receipt-001-copy.pdf (already uploaded)
+[2026-05-06 13:51:13] INFO     📦 Moved to processed (duplicate): test-receipt-001-copy.pdf
+[2026-05-06 13:52:00] INFO     ✅ Uploader re-enabled
+[2026-05-06 13:52:09] INFO     ✅ Uploader re-enabled
+[2026-05-06 13:52:29] DEBUG    📊 Telemetry report sent
+[2026-05-06 13:53:00] INFO     ✅ Uploader re-enabled
+[2026-05-06 13:53:09] INFO     ✅ Uploader re-enabled
+[2026-05-06 13:54:00] INFO     ✅ Uploader re-enabled
+[2026-05-06 13:54:09] INFO     ✅ Uploader re-enabled
+[2026-05-06 13:55:00] INFO     ✅ Uploader re-enabled
+[2026-05-06 13:55:09] INFO     ✅ Uploader re-enabled
+[2026-05-06 13:56:00] INFO     ✅ Uploader re-enabled
+[2026-05-06 13:56:09] INFO     ✅ Uploader re-enabled
+[2026-05-06 13:57:00] INFO     ✅ Uploader re-enabled
+[2026-05-06 13:57:09] INFO     ✅ Uploader re-enabled
+[2026-05-06 13:57:30] DEBUG    📊 Telemetry report sent
+[2026-05-06 13:58:01] INFO     ✅ Uploader re-enabled
+[2026-05-06 13:58:09] INFO     ✅ Uploader re-enabled
+[2026-05-06 13:59:01] INFO     ✅ Uploader re-enabled
+[2026-05-06 13:59:10] INFO     ✅ Uploader re-enabled
+[2026-05-06 14:00:01] INFO     ✅ Uploader re-enabled
+[2026-05-06 14:00:10] INFO     ✅ Uploader re-enabled
+[2026-05-06 14:01:01] INFO     ✅ Uploader re-enabled
+[2026-05-06 14:01:10] INFO     ✅ Uploader re-enabled
+[2026-05-06 14:02:01] INFO     ✅ Uploader re-enabled
+[2026-05-06 14:02:10] INFO     ✅ Uploader re-enabled
+[2026-05-06 14:02:30] DEBUG    📊 Telemetry report sent
+[2026-05-06 14:03:01] INFO     ✅ Uploader re-enabled
+[2026-05-06 14:03:10] INFO     ✅ Uploader re-enabled
+[2026-05-06 14:04:01] INFO     ✅ Uploader re-enabled
+[2026-05-06 14:04:10] INFO     ✅ Uploader re-enabled
+[2026-05-06 14:05:01] INFO     ✅ Uploader re-enabled
+[2026-05-06 14:05:10] INFO     ✅ Uploader re-enabled
+[2026-05-06 14:06:01] INFO     ✅ Uploader re-enabled
+[2026-05-06 14:06:10] INFO     ✅ Uploader re-enabled
+[2026-05-06 14:06:14] INFO     🔍 No device found – will retry in background
+[2026-05-06 14:06:14] INFO     💓 Heartbeat service started
+[2026-05-06 14:06:14] INFO     🚀 Agent started
+[2026-05-06 14:06:14] INFO     ✅ Uploader re-enabled
+[2026-05-06 14:07:01] INFO     ✅ Uploader re-enabled
+[2026-05-06 14:07:10] INFO     ✅ Uploader re-enabled
+[2026-05-06 14:07:14] INFO     ✅ Uploader re-enabled
+[2026-05-06 14:07:30] DEBUG    📊 Telemetry report sent
+[2026-05-06 14:08:01] INFO     ✅ Uploader re-enabled
+[2026-05-06 14:08:10] INFO     ✅ Uploader re-enabled
+[2026-05-06 14:08:14] INFO     ✅ Uploader re-enabled
+[2026-05-06 14:09:01] INFO     ✅ Uploader re-enabled
+[2026-05-06 14:09:10] INFO     ✅ Uploader re-enabled
+[2026-05-06 14:09:14] WARNING  💔 Heartbeat failed: Connection error
+[2026-05-06 14:10:01] WARNING  💔 Heartbeat failed: HTTP 404
+[2026-05-06 14:10:10] WARNING  💔 Heartbeat failed: HTTP 404
+[2026-05-06 14:10:14] ERROR    ❌ Backend appears offline (4 consecutive failures). Will keep trying silently.
+[2026-05-08 14:00:45] INFO     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+[2026-05-08 14:00:45] INFO     🚀 BillLess Agent starting…
+[2026-05-08 14:00:45] INFO     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+[2026-05-08 14:00:45] INFO     Agent version: 2.1.0
+[2026-05-08 14:00:45] INFO     Config version: 4
+[2026-05-08 14:00:45] INFO     🌐 API URL: http://127.0.0.1:8000
+[2026-05-08 14:00:45] INFO     📁 Watch folder OK: /Users/ashfar/Documents/BillLess/incoming
+[2026-05-08 14:00:45] INFO     📁 Incoming:   /Users/ashfar/Documents/BillLess/incoming
+[2026-05-08 14:00:45] INFO     📁 Processing: /Users/ashfar/Documents/BillLess/processing
+[2026-05-08 14:00:45] INFO     📁 Processed:  /Users/ashfar/Documents/BillLess/processed
+[2026-05-08 14:00:45] INFO     📁 Failed:     /Users/ashfar/Documents/BillLess/failed
+[2026-05-08 14:00:45] INFO     📁 Archive:    /Users/ashfar/Documents/BillLess/archive
+[2026-05-08 14:00:45] INFO     🏪 Shop: SHOP001 | Device: DEV001 | Counter: C1
+[2026-05-08 14:00:45] INFO     🗄️  Database initialised
+[2026-05-08 14:00:48] INFO     👁️  Watching: /Users/ashfar/Documents/BillLess/incoming
+[2026-05-08 14:00:48] INFO     🔍 No device found – will retry in background
+[2026-05-08 14:00:48] INFO     💓 Heartbeat service started
+[2026-05-08 14:00:48] INFO     ✅ All services running
+[2026-05-08 14:00:48] INFO     📁 Drop PDFs into: /Users/ashfar/Documents/BillLess/incoming
+[2026-05-08 14:00:49] WARNING  💔 Heartbeat failed: Connection error
+[2026-05-08 14:00:53] INFO     👁️  Watcher stopped
+[2026-05-08 14:00:54] INFO     🔌 Device disconnected
+[2026-05-08 14:00:59] INFO     🛑 Agent stopped
+[2026-05-08 14:00:59] INFO     🔌 Device disconnected
+[2026-05-08 14:01:04] INFO     🛑 Agent stopped
+[2026-05-08 14:03:10] INFO     🛑 Shutting down…
+[2026-05-08 14:03:10] INFO     🔌 Device disconnected
+[2026-05-08 14:03:10] INFO     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+[2026-05-08 14:03:10] INFO     🚀 BillLess Agent starting…
+[2026-05-08 14:03:10] INFO     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+[2026-05-08 14:03:10] INFO     Agent version: 2.1.0
+[2026-05-08 14:03:10] INFO     Config version: 4
+[2026-05-08 14:03:10] INFO     🌐 API URL: http://127.0.0.1:8000
+[2026-05-08 14:03:10] INFO     📁 Watch folder OK: /Users/ashfar/Documents/BillLess/incoming
+[2026-05-08 14:03:10] INFO     📁 Incoming:   /Users/ashfar/Documents/BillLess/incoming
+[2026-05-08 14:03:10] INFO     📁 Processing: /Users/ashfar/Documents/BillLess/processing
+[2026-05-08 14:03:10] INFO     📁 Processed:  /Users/ashfar/Documents/BillLess/processed
+[2026-05-08 14:03:10] INFO     📁 Failed:     /Users/ashfar/Documents/BillLess/failed
+[2026-05-08 14:03:10] INFO     📁 Archive:    /Users/ashfar/Documents/BillLess/archive
+[2026-05-08 14:03:10] INFO     🏪 Shop: SHOP001 | Device: DEV001 | Counter: C1
+[2026-05-08 14:03:10] INFO     🗄️  Database initialised
+[2026-05-08 14:03:10] INFO     👁️  Watching: /Users/ashfar/Documents/BillLess/incoming
+[2026-05-08 14:03:10] INFO     🔍 No device found – will retry in background
+[2026-05-08 14:03:10] INFO     💓 Heartbeat service started
+[2026-05-08 14:03:10] INFO     ✅ All services running
+[2026-05-08 14:03:10] INFO     📁 Drop PDFs into: /Users/ashfar/Documents/BillLess/incoming
+[2026-05-08 14:03:10] WARNING  💔 Heartbeat failed: Connection error
+[2026-05-08 14:42:04] WARNING  💔 Heartbeat failed: Connection error
+[2026-05-08 14:48:14] INFO     🛑 Shutting down…
+[2026-05-08 14:48:19] INFO     👁️  Watcher stopped
+[2026-05-08 14:48:21] INFO     🔌 Device disconnected
+[2026-05-08 14:48:21] INFO     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+[2026-05-08 14:48:21] INFO     🚀 BillLess Agent starting…
+[2026-05-08 14:48:21] INFO     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+[2026-05-08 14:48:21] INFO     Agent version: 2.1.0
+[2026-05-08 14:48:21] INFO     Config version: 4
+[2026-05-08 14:48:21] INFO     🌐 API URL: http://127.0.0.1:8000
+[2026-05-08 14:48:22] INFO     📁 Watch folder OK: /Users/ashfar/Documents/BillLess/incoming
+[2026-05-08 14:48:22] INFO     📁 Incoming:   /Users/ashfar/Documents/BillLess/incoming
+[2026-05-08 14:48:22] INFO     📁 Processing: /Users/ashfar/Documents/BillLess/processing
+[2026-05-08 14:48:22] INFO     📁 Processed:  /Users/ashfar/Documents/BillLess/processed
+[2026-05-08 14:48:22] INFO     📁 Failed:     /Users/ashfar/Documents/BillLess/failed
+[2026-05-08 14:48:22] INFO     📁 Archive:    /Users/ashfar/Documents/BillLess/archive
+[2026-05-08 14:48:22] INFO     🏪 Shop: SHOP001 | Device: DEV001 | Counter: C1
+[2026-05-08 14:48:22] INFO     🗄️  Database initialised
+[2026-05-08 14:48:22] INFO     👁️  Watching: /Users/ashfar/Documents/BillLess/incoming
+[2026-05-08 14:48:22] INFO     🔍 No device found – will retry in background
+[2026-05-08 14:48:22] INFO     💓 Heartbeat service started
+[2026-05-08 14:48:22] INFO     ✅ All services running
+[2026-05-08 14:48:22] INFO     📁 Drop PDFs into: /Users/ashfar/Documents/BillLess/incoming
+[2026-05-08 14:48:24] WARNING  💔 Heartbeat failed: Connection error
+[2026-05-08 14:48:26] INFO     👁️  Watcher stopped
+[2026-05-08 14:48:28] INFO     🔌 Device disconnected
+[2026-05-08 14:48:33] INFO     🛑 Agent stopped
+[2026-05-08 14:48:33] INFO     🛑 Shutting down…
+[2026-05-08 14:48:38] INFO     🔌 Device disconnected
+[2026-05-08 14:48:39] INFO     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+[2026-05-08 14:48:39] INFO     🚀 BillLess Agent starting…
+[2026-05-08 14:48:39] INFO     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+[2026-05-08 14:48:39] INFO     Agent version: 2.1.0
+[2026-05-08 14:48:39] INFO     Config version: 4
+[2026-05-08 14:48:39] INFO     🌐 API URL: http://127.0.0.1:8000
+[2026-05-08 14:48:39] INFO     📁 Watch folder OK: /Users/ashfar/Documents/BillLess/incoming
+[2026-05-08 14:48:39] INFO     📁 Incoming:   /Users/ashfar/Documents/BillLess/incoming
+[2026-05-08 14:48:39] INFO     📁 Processing: /Users/ashfar/Documents/BillLess/processing
+[2026-05-08 14:48:39] INFO     📁 Processed:  /Users/ashfar/Documents/BillLess/processed
+[2026-05-08 14:48:39] INFO     📁 Failed:     /Users/ashfar/Documents/BillLess/failed
+[2026-05-08 14:48:39] INFO     📁 Archive:    /Users/ashfar/Documents/BillLess/archive
+[2026-05-08 14:48:39] INFO     🏪 Shop: SHOP001 | Device: DEV001 | Counter: C1
+[2026-05-08 14:48:39] INFO     🗄️  Database initialised
+[2026-05-08 14:48:39] INFO     👁️  Watching: /Users/ashfar/Documents/BillLess/incoming
+[2026-05-08 14:48:39] INFO     🔍 No device found – will retry in background
+[2026-05-08 14:48:39] INFO     💓 Heartbeat service started
+[2026-05-08 14:48:39] INFO     ✅ All services running
+[2026-05-08 14:48:39] INFO     📁 Drop PDFs into: /Users/ashfar/Documents/BillLess/incoming
+[2026-05-08 14:48:39] WARNING  💔 Heartbeat failed: Connection error
+[2026-05-08 14:48:42] INFO     🛑 Shutting down…
+[2026-05-08 14:48:47] INFO     👁️  Watcher stopped
+[2026-05-08 14:48:47] INFO     🔌 Device disconnected
+[2026-05-08 14:48:49] INFO     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+[2026-05-08 14:48:49] INFO     🚀 BillLess Agent starting…
+[2026-05-08 14:48:49] INFO     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+[2026-05-08 14:48:49] INFO     Agent version: 2.1.0
+[2026-05-08 14:48:49] INFO     Config version: 4
+[2026-05-08 14:48:49] INFO     🌐 API URL: http://127.0.0.1:8000
+[2026-05-08 14:48:49] INFO     📁 Watch folder OK: /Users/ashfar/Documents/BillLess/incoming
+[2026-05-08 14:48:49] INFO     📁 Incoming:   /Users/ashfar/Documents/BillLess/incoming
+[2026-05-08 14:48:49] INFO     📁 Processing: /Users/ashfar/Documents/BillLess/processing
+[2026-05-08 14:48:49] INFO     📁 Processed:  /Users/ashfar/Documents/BillLess/processed
+[2026-05-08 14:48:49] INFO     📁 Failed:     /Users/ashfar/Documents/BillLess/failed
+[2026-05-08 14:48:49] INFO     📁 Archive:    /Users/ashfar/Documents/BillLess/archive
+[2026-05-08 14:48:49] INFO     🏪 Shop: SHOP001 | Device: DEV001 | Counter: C1
+[2026-05-08 14:48:49] INFO     🗄️  Database initialised
+[2026-05-08 14:48:49] INFO     👁️  Watching: /Users/ashfar/Documents/BillLess/incoming
+[2026-05-08 14:48:49] INFO     🔍 No device found – will retry in background
+[2026-05-08 14:48:49] INFO     💓 Heartbeat service started
+[2026-05-08 14:48:49] INFO     ✅ All services running
+[2026-05-08 14:48:49] INFO     📁 Drop PDFs into: /Users/ashfar/Documents/BillLess/incoming
+[2026-05-08 14:48:50] WARNING  💔 Heartbeat failed: Connection error
+[2026-05-08 14:48:54] INFO     👁️  Watcher stopped
+[2026-05-08 14:48:56] INFO     🔌 Device disconnected
+[2026-05-08 14:49:01] INFO     🛑 Agent stopped
+[2026-05-08 14:49:01] INFO     🔌 Device disconnected
+[2026-05-08 14:49:06] INFO     🛑 Agent stopped
+[2026-05-08 14:49:06] INFO     🔌 Device disconnected
+[2026-05-08 14:49:11] INFO     🛑 Agent stopped
+[2026-05-08 14:49:11] INFO     🔌 Device disconnected
+[2026-05-08 14:49:16] INFO     🛑 Agent stopped
+[2026-05-08 14:49:16] INFO     🔌 Device disconnected
+[2026-05-08 14:49:21] INFO     🛑 Agent stopped
+[2026-05-08 18:33:17] INFO     🛑 Shutting down…
+[2026-05-08 18:33:17] INFO     🔌 Device disconnected
+[2026-05-08 18:33:17] INFO     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+[2026-05-08 18:33:17] INFO     🚀 BillLess Agent starting…
+[2026-05-08 18:33:17] INFO     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+[2026-05-08 18:33:17] INFO     Agent version: 2.1.0
+[2026-05-08 18:33:17] INFO     Config version: 4
+[2026-05-08 18:33:17] INFO     🌐 API URL: http://127.0.0.1:8000
+[2026-05-08 18:33:17] INFO     📁 Watch folder OK: /Users/ashfar/Documents/BillLess/incoming
+[2026-05-08 18:33:17] INFO     📁 Incoming:   /Users/ashfar/Documents/BillLess/incoming
+[2026-05-08 18:33:17] INFO     📁 Processing: /Users/ashfar/Documents/BillLess/processing
+[2026-05-08 18:33:17] INFO     📁 Processed:  /Users/ashfar/Documents/BillLess/processed
+[2026-05-08 18:33:17] INFO     📁 Failed:     /Users/ashfar/Documents/BillLess/failed
+[2026-05-08 18:33:17] INFO     📁 Archive:    /Users/ashfar/Documents/BillLess/archive
+[2026-05-08 18:33:17] INFO     🏪 Shop: SHOP001 | Device: DEV001 | Counter: C1
+[2026-05-08 18:33:17] INFO     🗄️  Database initialised
+[2026-05-08 18:33:17] INFO     👁️  Watching: /Users/ashfar/Documents/BillLess/incoming
+[2026-05-08 18:33:17] INFO     🔍 No device found – will retry in background
+[2026-05-08 18:33:17] INFO     💓 Heartbeat service started
+[2026-05-08 18:33:17] INFO     ✅ All services running
+[2026-05-08 18:33:17] INFO     📁 Drop PDFs into: /Users/ashfar/Documents/BillLess/incoming
+[2026-05-08 18:33:18] WARNING  💔 Heartbeat failed: HTTP 404
+[2026-05-08 18:33:19] INFO     🛑 Shutting down…
+[2026-05-08 18:33:25] INFO     👁️  Watcher stopped
+[2026-05-08 18:33:26] INFO     🔌 Device disconnected
+[2026-05-08 18:33:28] INFO     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+[2026-05-08 18:33:28] INFO     🚀 BillLess Agent starting…
+[2026-05-08 18:33:28] INFO     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+[2026-05-08 18:33:28] INFO     Agent version: 2.1.0
+[2026-05-08 18:33:28] INFO     Config version: 4
+[2026-05-08 18:33:28] INFO     🌐 API URL: http://127.0.0.1:8000
+[2026-05-08 18:33:28] INFO     📁 Watch folder OK: /Users/ashfar/Documents/BillLess/incoming
+[2026-05-08 18:33:28] INFO     📁 Incoming:   /Users/ashfar/Documents/BillLess/incoming
+[2026-05-08 18:33:28] INFO     📁 Processing: /Users/ashfar/Documents/BillLess/processing
+[2026-05-08 18:33:28] INFO     📁 Processed:  /Users/ashfar/Documents/BillLess/processed
+[2026-05-08 18:33:28] INFO     📁 Failed:     /Users/ashfar/Documents/BillLess/failed
+[2026-05-08 18:33:28] INFO     📁 Archive:    /Users/ashfar/Documents/BillLess/archive
+[2026-05-08 18:33:28] INFO     🏪 Shop: SHOP001 | Device: DEV001 | Counter: C1
+[2026-05-08 18:33:28] INFO     🗄️  Database initialised
+[2026-05-08 18:33:28] INFO     👁️  Watching: /Users/ashfar/Documents/BillLess/incoming
+[2026-05-08 18:33:28] INFO     🔍 No device found – will retry in background
+[2026-05-08 18:33:28] INFO     💓 Heartbeat service started
+[2026-05-08 18:33:28] INFO     ✅ All services running
+[2026-05-08 18:33:28] INFO     📁 Drop PDFs into: /Users/ashfar/Documents/BillLess/incoming
+[2026-05-08 18:33:28] WARNING  💔 Heartbeat failed: HTTP 404
+[2026-05-08 18:34:28] WARNING  💔 Heartbeat failed: HTTP 404
+[2026-05-08 18:35:29] WARNING  💔 Heartbeat failed: HTTP 404
+[2026-05-08 18:36:29] ERROR    ❌ Backend appears offline (4 consecutive failures). Will keep trying silently.
+[2026-05-08 21:52:57] INFO     🛑 Shutting down…
+[2026-05-08 21:53:02] INFO     👁️  Watcher stopped
+[2026-05-08 21:53:03] INFO     🔌 Device disconnected
+[2026-05-08 21:53:03] INFO     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+[2026-05-08 21:53:03] INFO     🚀 BillLess Agent starting…
+[2026-05-08 21:53:03] INFO     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+[2026-05-08 21:53:03] INFO     Agent version: 2.1.0
+[2026-05-08 21:53:03] INFO     Config version: 4
+[2026-05-08 21:53:03] INFO     🌐 API URL: http://127.0.0.1:8000
+[2026-05-08 21:53:03] INFO     📁 Watch folder OK: /Users/ashfar/Documents/BillLess/incoming
+[2026-05-08 21:53:03] INFO     📁 Incoming:   /Users/ashfar/Documents/BillLess/incoming
+[2026-05-08 21:53:03] INFO     📁 Processing: /Users/ashfar/Documents/BillLess/processing
+[2026-05-08 21:53:03] INFO     📁 Processed:  /Users/ashfar/Documents/BillLess/processed
+[2026-05-08 21:53:03] INFO     📁 Failed:     /Users/ashfar/Documents/BillLess/failed
+[2026-05-08 21:53:03] INFO     📁 Archive:    /Users/ashfar/Documents/BillLess/archive
+[2026-05-08 21:53:03] INFO     🏪 Shop: SHOP001 | Device: DEV001 | Counter: C1
+[2026-05-08 21:53:03] INFO     🗄️  Database initialised
+[2026-05-08 21:53:03] INFO     👁️  Watching: /Users/ashfar/Documents/BillLess/incoming
+[2026-05-08 21:53:03] INFO     🔍 No device found – will retry in background
+[2026-05-08 21:53:03] INFO     💓 Heartbeat service started
+[2026-05-08 21:53:03] INFO     ✅ All services running
+[2026-05-08 21:53:03] INFO     📁 Drop PDFs into: /Users/ashfar/Documents/BillLess/incoming
+[2026-05-08 21:53:04] WARNING  💔 Heartbeat failed: HTTP 404
+[2026-05-08 21:54:04] WARNING  💔 Heartbeat failed: HTTP 404
+[2026-05-08 21:55:04] WARNING  💔 Heartbeat failed: HTTP 404
+[2026-05-08 21:56:04] ERROR    ❌ Backend appears offline (4 consecutive failures). Will keep trying silently.
+[2026-05-09 12:44:14] WARNING  💔 Heartbeat failed: Connection error
+[2026-05-09 12:45:14] WARNING  💔 Heartbeat failed: Connection error
+[2026-05-09 12:46:14] WARNING  💔 Heartbeat failed: Connection error
+[2026-05-09 13:33:19] WARNING  💔 Heartbeat failed: Connection error
+[2026-05-09 13:34:19] WARNING  💔 Heartbeat failed: Connection error
+[2026-05-09 13:35:19] WARNING  💔 Heartbeat failed: Connection error
+[2026-05-09 13:36:19] ERROR    ❌ Backend appears offline (4 consecutive failures). Will keep trying silently.
+[2026-05-09 19:27:25] WARNING  💔 Heartbeat failed: Connection error
+[2026-05-09 20:42:31] WARNING  💔 Heartbeat failed: Connection error
+[2026-05-09 20:43:31] WARNING  💔 Heartbeat failed: Connection error
+[2026-05-09 20:44:31] WARNING  💔 Heartbeat failed: Connection error
+[2026-05-09 20:45:31] ERROR    ❌ Backend appears offline (4 consecutive failures). Will keep trying silently.
+[2026-05-10 23:12:26] WARNING  💔 Heartbeat failed: Connection error
+[2026-05-10 23:13:15] INFO     🛑 Shutting down…
+[2026-05-10 23:13:20] INFO     👁️  Watcher stopped
+[2026-05-10 23:13:22] INFO     🔌 Device disconnected
+[2026-05-11 11:27:14] INFO     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+[2026-05-11 11:27:14] INFO     🚀 BillLess Agent starting…
+[2026-05-11 11:27:14] INFO     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+[2026-05-11 11:27:14] INFO     Agent version: 2.1.0
+[2026-05-11 11:27:14] INFO     Config version: 4
+[2026-05-11 11:27:14] INFO     🌐 API URL: http://127.0.0.1:8000
+[2026-05-11 11:27:14] INFO     📁 Watch folder OK: /Users/ashfar/Documents/BillLess/incoming
+[2026-05-11 11:27:14] INFO     📁 Incoming:   /Users/ashfar/Documents/BillLess/incoming
+[2026-05-11 11:27:14] INFO     📁 Processing: /Users/ashfar/Documents/BillLess/processing
+[2026-05-11 11:27:14] INFO     📁 Processed:  /Users/ashfar/Documents/BillLess/processed
+[2026-05-11 11:27:14] INFO     📁 Failed:     /Users/ashfar/Documents/BillLess/failed
+[2026-05-11 11:27:14] INFO     📁 Archive:    /Users/ashfar/Documents/BillLess/archive
+[2026-05-11 11:27:14] INFO     🏪 Shop: SHOP001 | Device: DEV001 | Counter: C1
+[2026-05-11 11:27:14] INFO     🗄️  Database initialised
+[2026-05-11 11:27:14] INFO     👁️  Watching: /Users/ashfar/Documents/BillLess/incoming
+[2026-05-11 11:27:14] INFO     🔍 No device found – will retry in background
+[2026-05-11 11:27:14] INFO     💓 Heartbeat service started
+[2026-05-11 11:27:14] INFO     ✅ All services running
+[2026-05-11 11:27:14] INFO     📁 Drop PDFs into: /Users/ashfar/Documents/BillLess/incoming
+[2026-05-11 11:27:15] WARNING  💔 Heartbeat failed: Connection error
+[2026-05-11 11:28:00] INFO     👁️  Watcher stopped
+[2026-05-11 11:28:01] INFO     🔌 Device disconnected
+[2026-05-11 11:28:06] INFO     🛑 Agent stopped
+[2026-05-12 12:12:37] INFO     🔌 Device disconnected
+[2026-05-12 12:12:37] INFO     🛑 Agent stopped
+[2026-05-12 18:18:19] INFO     🛑 Shutting down…
+[2026-05-12 18:18:19] INFO     🔌 Device disconnected
+[2026-05-12 18:18:20] INFO     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+[2026-05-12 18:18:20] INFO     🚀 BillLess Agent starting…
+[2026-05-12 18:18:20] INFO     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+[2026-05-12 18:18:20] INFO     Agent version: 2.1.0
+[2026-05-12 18:18:20] INFO     Config version: 4
+[2026-05-12 18:18:20] INFO     🌐 API URL: http://127.0.0.1:8000
+[2026-05-12 18:18:20] INFO     📁 Watch folder OK: /Users/ashfar/Documents/BillLess/incoming
+[2026-05-12 18:18:20] INFO     📁 Incoming:   /Users/ashfar/Documents/BillLess/incoming
+[2026-05-12 18:18:20] INFO     📁 Processing: /Users/ashfar/Documents/BillLess/processing
+[2026-05-12 18:18:20] INFO     📁 Processed:  /Users/ashfar/Documents/BillLess/processed
+[2026-05-12 18:18:20] INFO     📁 Failed:     /Users/ashfar/Documents/BillLess/failed
+[2026-05-12 18:18:20] INFO     📁 Archive:    /Users/ashfar/Documents/BillLess/archive
+[2026-05-12 18:18:20] INFO     🏪 Shop: SHOP001 | Device: DEV001 | Counter: C1
+[2026-05-12 18:18:20] INFO     🗄️  Database initialised
+[2026-05-12 18:18:20] INFO     👁️  Watching: /Users/ashfar/Documents/BillLess/incoming
+[2026-05-12 18:18:20] INFO     🔍 No device found – will retry in background
+[2026-05-12 18:18:20] INFO     💓 Heartbeat service started
+[2026-05-12 18:18:20] INFO     ✅ All services running
+[2026-05-12 18:18:20] INFO     📁 Drop PDFs into: /Users/ashfar/Documents/BillLess/incoming
+[2026-05-12 18:18:20] WARNING  💔 Heartbeat failed: Connection error
+[2026-05-12 18:18:44] INFO     🛑 Shutting down…
+[2026-05-12 18:18:49] INFO     👁️  Watcher stopped
+[2026-05-12 18:18:51] INFO     🔌 Device disconnected
+[2026-05-12 20:14:15] INFO     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+[2026-05-12 20:14:15] INFO     🚀 BillLess Agent starting…
+[2026-05-12 20:14:15] INFO     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+[2026-05-12 20:14:15] INFO     Agent version: 2.1.0
+[2026-05-12 20:14:15] INFO     Config version: 4
+[2026-05-12 20:14:15] INFO     🌐 API URL: http://127.0.0.1:8000
+[2026-05-12 20:14:15] INFO     📁 Watch folder OK: /Users/ashfar/Documents/BillLess/incoming
+[2026-05-12 20:14:15] INFO     📁 Incoming:   /Users/ashfar/Documents/BillLess/incoming
+[2026-05-12 20:14:15] INFO     📁 Processing: /Users/ashfar/Documents/BillLess/processing
+[2026-05-12 20:14:15] INFO     📁 Processed:  /Users/ashfar/Documents/BillLess/processed
+[2026-05-12 20:14:15] INFO     📁 Failed:     /Users/ashfar/Documents/BillLess/failed
+[2026-05-12 20:14:15] INFO     📁 Archive:    /Users/ashfar/Documents/BillLess/archive
+[2026-05-12 20:14:15] INFO     🏪 Shop: SHOP001 | Device: DEV001 | Counter: C1
+[2026-05-12 20:14:15] INFO     🗄️  Database initialised
+[2026-05-12 20:14:16] INFO     👁️  Watching: /Users/ashfar/Documents/BillLess/incoming
+[2026-05-12 20:14:16] INFO     🔍 No device found – will retry in background
+[2026-05-12 20:14:16] INFO     💓 Heartbeat service started
+[2026-05-12 20:14:16] INFO     ✅ All services running
+[2026-05-12 20:14:16] INFO     📁 Drop PDFs into: /Users/ashfar/Documents/BillLess/incoming
+[2026-05-12 20:14:16] WARNING  💔 Heartbeat failed: Connection error
+[2026-05-12 20:15:17] WARNING  💔 Heartbeat failed: Connection error
+[2026-05-12 20:16:17] WARNING  💔 Heartbeat failed: Connection error
+[2026-05-12 20:17:17] ERROR    ❌ Backend appears offline (4 consecutive failures). Will keep trying silently.
+[2026-05-17 11:46:11] WARNING  💔 Heartbeat failed: Connection error
+[2026-05-17 11:47:12] WARNING  💔 Heartbeat failed: Connection error
+[2026-05-17 11:48:12] WARNING  💔 Heartbeat failed: Connection error
+[2026-05-17 11:49:12] ERROR    ❌ Backend appears offline (4 consecutive failures). Will keep trying silently.

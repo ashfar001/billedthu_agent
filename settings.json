@@ -1,0 +1,20 @@
+{
+  "config_version": 5,
+  "api_url": "https://billeduthu.onrender.com",
+  "require_https": true,
+  "shop_id": "SHOP001",
+  "device_id": "DEV001",
+  "counter_id": "C1",
+  "api_key": "blp_ej2clcMzjifKMBgirsmr1XPEbGmFb-670g1vw86aIkE",
+  "base_folder": "/Users/ashfar/Documents/BillLess",
+  "device_port": "auto",
+  "auto_start": false,
+  "upload_retry_count": 3,
+  "upload_retry_delay": 2,
+  "heartbeat_interval": 60,
+  "rate_limit_per_minute": 30,
+  "telemetry_enabled": false,
+  "auto_update_enabled": false,
+  "printer_name": "BillLess Printer",
+  "printer_capture_filename": "billless_capture.pdf"
+}
