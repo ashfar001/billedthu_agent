@@ -43,7 +43,7 @@ DEFAULTS = {
     "upload_retry_count": 3,
     "upload_retry_delay": 2,
     "upload_max_file_mb": 25,
-    "watch_extensions": [".pdf", ".csv"],
+    "watch_extensions": [".pdf", ".txt", ".text", ".csv"],
     "printer_name": PRINTER_NAME,
     "printer_capture_filename": "billless_capture.pdf",
     "file_stable_seconds": 2,
@@ -59,6 +59,7 @@ DEFAULTS = {
     "auto_update_enabled": True,
     "spool_poll_interval": 1,
     "backend_timeout_seconds": 30,
+    "google_vision_enabled": False,
 }
 
 # ─── Derived folder paths (computed from base_folder) ────────────────────────

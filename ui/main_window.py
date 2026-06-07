@@ -5,6 +5,7 @@ Modern PyQt6 dashboard for the BillLess Virtual Receipt Printer.
 from __future__ import annotations
 
 import os
+import json
 
 from PyQt6.QtCore import Qt, QTimer, pyqtSignal
 from PyQt6.QtGui import QColor
@@ -208,6 +209,7 @@ class MainWindow(QMainWindow):
         self._last_name.setStyleSheet(f"font-size: 15px; font-weight: 800; color: {_INK};")
         self._last_meta = QLabel("Waiting for first captured print job")
         self._last_meta.setProperty("class", "subtle")
+        self._last_meta.setWordWrap(True)
         last_layout.addWidget(label)
         last_layout.addWidget(self._last_name)
         last_layout.addWidget(self._last_meta)
@@ -321,11 +323,33 @@ class MainWindow(QMainWindow):
         last = db.last_receipt()
         if last:
             self._last_name.setText(os.path.basename(last["filepath"]))
-            total = last["total"] if last["total"] is not None else "-"
-            self._last_meta.setText(f"{last['status']} | bill {last['bill_number'] or '-'} | total {total}")
+            receipt_json = self._load_receipt_json(last.get("parsed_json") or "{}")
+            merchant = receipt_json.get("merchant", {})
+            receipt = receipt_json.get("receipt", {})
+            summary = receipt_json.get("summary", {})
+            metadata = receipt_json.get("metadata", {})
+            total = summary.get("grand_total") if summary.get("grand_total") is not None else last["total"]
+            table = receipt.get("table_id") or "-"
+            counter = receipt.get("counter_id") or last.get("counter_id") or get("counter_id") or "-"
+            confidence = metadata.get("confidence", 0)
+            status = metadata.get("upload_status") or last["status"]
+            if metadata.get("needs_review"):
+                status = "Needs review" if status != "NEEDS_TABLE_ASSIGNMENT" else "Needs table assignment"
+            self._last_meta.setText(
+                f"{status} | store {merchant.get('name') or last.get('shop_name') or '-'} | "
+                f"total {total if total is not None else '-'} | table {table} | "
+                f"counter {counter} | confidence {confidence}"
+            )
         elif self._pdf_capture.last_captured:
             self._last_name.setText(self._pdf_capture.last_captured)
             self._last_meta.setText("Captured, waiting for parser")
+
+    def _load_receipt_json(self, value: str) -> dict:
+        try:
+            parsed = json.loads(value or "{}")
+            return parsed if isinstance(parsed, dict) else {}
+        except json.JSONDecodeError:
+            return {}
 
     def _test_print(self) -> None:
         self._virtual_printer.ensure_installed()

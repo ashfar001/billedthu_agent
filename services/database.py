@@ -36,6 +36,8 @@ class ReceiptStatus:
     ACTIVE = "ACTIVE"
     FAILED = "FAILED"
     DUPLICATE = "DUPLICATE"
+    NEEDS_REVIEW = "NEEDS_REVIEW"
+    NEEDS_TABLE_ASSIGNMENT = "NEEDS_TABLE_ASSIGNMENT"
 
 
 def _conn() -> sqlite3.Connection:
@@ -171,6 +173,18 @@ def history_exists(file_hash: str) -> bool:
 
 def create_receipt(filepath: str, file_hash: str, parsed: dict[str, Any]) -> int:
     conn = _conn()
+    receipt_json = parsed.get("receipt_json") or parsed
+    receipt = receipt_json.get("receipt", {})
+    merchant = receipt_json.get("merchant", {})
+    summary = receipt_json.get("summary", {})
+    metadata = receipt_json.get("metadata", {})
+    status = (
+        ReceiptStatus.NEEDS_TABLE_ASSIGNMENT
+        if metadata.get("upload_status") == ReceiptStatus.NEEDS_TABLE_ASSIGNMENT
+        else ReceiptStatus.NEEDS_REVIEW
+        if metadata.get("needs_review")
+        else ReceiptStatus.PARSED
+    )
     cur = conn.execute(
         """
         INSERT INTO receipts (
@@ -184,19 +198,19 @@ def create_receipt(filepath: str, file_hash: str, parsed: dict[str, Any]) -> int
             filepath,
             parsed.get("original_filename", ""),
             file_hash,
-            ReceiptStatus.PARSED,
+            status,
             get("shop_id") or "",
             get("device_id") or "",
-            get("counter_id") or "",
-            parsed.get("bill_number", "") or "",
-            parsed.get("total"),
-            parsed.get("subtotal"),
-            parsed.get("tax"),
-            parsed.get("cashier", "") or "",
-            parsed.get("payment_method", "") or "",
-            parsed.get("shop_name", "") or "",
-            parsed.get("timestamp", "") or "",
-            json.dumps(parsed, ensure_ascii=False),
+            receipt.get("counter_id") or get("counter_id") or "",
+            receipt.get("bill_number") or receipt.get("invoice_number") or "",
+            summary.get("grand_total"),
+            summary.get("subtotal"),
+            summary.get("tax_total"),
+            receipt.get("cashier", "") or "",
+            receipt.get("payment_method", "") or "",
+            merchant.get("name", "") or "",
+            " ".join(part for part in (receipt.get("date"), receipt.get("time")) if part),
+            json.dumps(receipt_json, ensure_ascii=False),
         ),
     )
     conn.commit()
@@ -224,7 +238,9 @@ def queue_add(receipt_id: int, filepath: str, file_hash: str) -> int:
         """,
         (receipt_id, filepath, file_hash, int(get("upload_retry_count") or 3)),
     )
-    mark_receipt(receipt_id, ReceiptStatus.QUEUED)
+    row = _conn().execute("SELECT status FROM receipts WHERE id=?", (receipt_id,)).fetchone()
+    if not row or row["status"] not in (ReceiptStatus.NEEDS_REVIEW, ReceiptStatus.NEEDS_TABLE_ASSIGNMENT):
+        mark_receipt(receipt_id, ReceiptStatus.QUEUED)
     return int(cur.lastrowid)
 
 

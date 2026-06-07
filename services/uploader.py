@@ -25,6 +25,21 @@ from utils.helpers import file_hash, human_size, validate_file_size
 from utils.validators import validate_file
 
 
+def _validate_receipt_json(receipt_json: dict) -> tuple[bool, str]:
+    if not isinstance(receipt_json, dict):
+        return False, "receipt_json must be an object"
+    if not isinstance(receipt_json.get("items", []), list):
+        return False, "items must be an array"
+    summary = receipt_json.get("summary", {})
+    grand_total = summary.get("grand_total")
+    if grand_total is not None and not isinstance(grand_total, (int, float)):
+        return False, "grand_total must be numeric or null"
+    metadata = receipt_json.get("metadata", {})
+    if not metadata.get("raw_text", ""):
+        logger.warning("Receipt raw_text is empty; parser will mark it for review")
+    return True, ""
+
+
 class Uploader:
     def __init__(self):
         self._running = False
@@ -87,6 +102,11 @@ class Uploader:
 
         parsed = parse_receipt(processing_path)
         parsed["original_filename"] = basename
+        ok, reason = _validate_receipt_json(parsed.get("receipt_json") or parsed)
+        if not ok:
+            logger.warning(f"Invalid parsed receipt JSON: {reason}")
+            move_to_failed(processing_path)
+            return
         receipt_id = db.create_receipt(processing_path, file_sha, parsed)
         db.queue_add(receipt_id, processing_path, file_sha)
         logger.info(f"Queued receipt upload: {os.path.basename(processing_path)} ({human_size(os.path.getsize(processing_path))})")
@@ -151,20 +171,28 @@ class Uploader:
             parsed = {}
 
         data = {
-            "shop_id": get("shop_id") or "",
             "device_id": get("device_id") or "",
-            "counter_id": get("counter_id") or "",
+            "store_code": get("shop_id") or "",
+            "counter_id": parsed.get("receipt", {}).get("counter_id") or get("counter_id") or "",
+            "table_id": parsed.get("receipt", {}).get("table_id", ""),
             "file_hash": file_sha,
-            "parsed_receipt": json.dumps(parsed, ensure_ascii=False),
+            "receipt_json": json.dumps(parsed, ensure_ascii=False),
+            "raw_text": parsed.get("metadata", {}).get("raw_text", ""),
+            "parser_confidence": str(parsed.get("metadata", {}).get("confidence", 0)),
+            "upload_status": parsed.get("metadata", {}).get("upload_status", "READY"),
         }
+        # Keep the legacy fields until older backend deployments are retired.
+        data["shop_id"] = data["store_code"]
+        data["parsed_receipt"] = data["receipt_json"]
         url = f"{api_url}/api/bills/upload/"
+        mime_type = "application/pdf" if filepath.lower().endswith(".pdf") else "text/plain"
         try:
             with open(filepath, "rb") as handle:
                 response = requests.post(
                     url,
                     headers=headers,
                     data=data,
-                    files={"file": (os.path.basename(filepath), handle, "application/pdf")},
+                    files={"file": (os.path.basename(filepath), handle, mime_type)},
                     timeout=int(get("backend_timeout_seconds") or 30),
                 )
             if response.status_code in (200, 201):

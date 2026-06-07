@@ -6,6 +6,7 @@ Pre-upload validation to catch corrupt / empty / invalid files.
 Validates:
   ✅ File exists and size > 0
   ✅ PDF magic bytes (%%PDF header)
+  ✅ Text receipts are readable
   ✅ CSV basic structure (has rows, parseable)
   ✅ File not truncated (checks trailer for PDF)
 
@@ -53,6 +54,8 @@ def validate_file(filepath: str) -> ValidationResult:
         return _validate_pdf(filepath, size)
     elif ext == ".csv":
         return _validate_csv(filepath, size)
+    elif ext in (".txt", ".text"):
+        return _validate_text(filepath)
     else:
         return ValidationResult(False, f"Unsupported extension: {ext}")
 
@@ -132,3 +135,17 @@ def _validate_csv(filepath: str, size: int) -> ValidationResult:
         return ValidationResult(False, f"Cannot read CSV: {e}")
     except Exception as e:
         return ValidationResult(False, f"CSV validation error: {e}")
+
+
+def _validate_text(filepath: str) -> ValidationResult:
+    """Validate text receipt content without forcing a specific layout."""
+    try:
+        with open(filepath, "r", encoding="utf-8", errors="replace") as f:
+            sample = f.read(4096)
+        if not sample.strip():
+            return ValidationResult(False, "Text receipt is empty")
+        return ValidationResult(True)
+    except IOError as e:
+        return ValidationResult(False, f"Cannot read text receipt: {e}")
+    except Exception as e:
+        return ValidationResult(False, f"Text validation error: {e}")

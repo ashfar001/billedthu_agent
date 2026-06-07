@@ -4,6 +4,8 @@ requests>=2.31
 pyserial>=3.5
 keyring>=25.0
 pywin32>=306; platform_system == "Windows"
+PyMuPDF>=1.24
 pypdf>=4.0
 pdfplumber>=0.11
+google-cloud-vision>=3.7
 pyinstaller>=6.0
