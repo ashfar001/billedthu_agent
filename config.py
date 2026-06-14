@@ -1,8 +1,8 @@
 """
-BillLess Virtual Receipt Printer - Configuration
+Bill Eduthu Agent - Configuration
 
 Folder lifecycle:
-  ~/Documents/BillLess/
+  Windows: C:\\ProgramData\\BillEduthuAgent\\
   ├── incoming/      ← agent watches this
   ├── processing/    ← file moved here during upload
   ├── processed/     ← successful uploads
@@ -10,33 +10,48 @@ Folder lifecycle:
   └── archive/       ← old processed files (auto-cleanup)
 """
 
-import os
 import json
+import os
+import platform
 import sys
 
 # ─── Paths ───────────────────────────────────────────────────────────────────
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-CONFIG_FILE = os.path.join(BASE_DIR, "settings.json")
-LOG_DIR = os.path.join(BASE_DIR, "logs")
-DB_FILE = os.path.join(BASE_DIR, "agent.db")
+
+
+def _default_data_dir() -> str:
+    if platform.system() == "Windows":
+        return os.path.join(os.environ.get("ProgramData", r"C:\ProgramData"), "BillEduthuAgent")
+    return os.path.expanduser("~/Documents/BillEduthuAgent")
+
+
+DATA_DIR = os.environ.get("BILL_EDUTHU_DATA_DIR", _default_data_dir())
+CONFIG_FILE = os.path.join(DATA_DIR, "settings.json")
+LOG_DIR = os.path.join(DATA_DIR, "logs")
+DB_FILE = os.path.join(DATA_DIR, "agent.db")
 
 # ─── Version ─────────────────────────────────────────────────────────────────
-AGENT_VERSION = "3.0.0"
-CONFIG_VERSION = 5
-PRINTER_NAME = "BillLess Printer"
+AGENT_VERSION = "3.1.0"
+CONFIG_VERSION = 6
+APP_NAME = "Bill Eduthu Agent"
+PRINTER_NAME = "Bill Eduthu Printer"
 
 # ─── Keyring service name ────────────────────────────────────────────────────
-_KEYRING_SERVICE = "BillLessAgent"
-_KEYRING_KEY = "api_key"
+_KEYRING_SERVICE = "BillEduthuAgent"
+_API_KEYRING_KEY = "api_key"
+_DEVICE_SECRET_KEY = "device_secret"
 
 # ─── Defaults ────────────────────────────────────────────────────────────────
 DEFAULTS = {
     "config_version": CONFIG_VERSION,
-    "api_url": "https://api.billless.io",
+    "api_url": "https://billeduthu.in",
+    "upload_url": "",
     "shop_id": "",
+    "store_code": "",
+    "merchant_name": "",
     "device_id": "",
     "counter_id": "",
-    "base_folder": os.path.expanduser("~/Documents/BillLess"),
+    "base_folder": DATA_DIR,
     "device_port": "auto",
     "device_baud_rate": 9600,
     "device_vid_pid": "",
@@ -60,6 +75,8 @@ DEFAULTS = {
     "spool_poll_interval": 1,
     "backend_timeout_seconds": 30,
     "google_vision_enabled": False,
+    "activated": False,
+    "machine_name": platform.node(),
 }
 
 # ─── Derived folder paths (computed from base_folder) ────────────────────────
@@ -94,6 +111,10 @@ def logs_folder() -> str:
     return os.path.join(load().get("base_folder", DEFAULTS["base_folder"]), "logs")
 
 
+def queue_folder() -> str:
+    return get_folder("queue")
+
+
 def spool_capture_folder() -> str:
     return os.path.join(incoming_folder(), "_spool_capture")
 
@@ -119,6 +140,16 @@ _MIGRATIONS = {
         "printer_capture_filename": "billless_capture.pdf",
         "spool_poll_interval": 1,
         "backend_timeout_seconds": 30,
+    }),
+    5: lambda cfg: cfg.update({
+        "store_code": cfg.get("store_code") or cfg.get("shop_id", ""),
+        "merchant_name": cfg.get("merchant_name", ""),
+        "upload_url": cfg.get("upload_url", ""),
+        "activated": bool(cfg.get("device_id") and (cfg.get("shop_id") or cfg.get("store_code"))),
+        "base_folder": DATA_DIR if sys.platform.startswith("win") else cfg.get("base_folder", DATA_DIR),
+        "printer_name": PRINTER_NAME,
+        "google_vision_enabled": False,
+        "machine_name": platform.node(),
     }),
 }
 
@@ -159,7 +190,7 @@ def get_api_key() -> str:
     if _keyring_available():
         import keyring
         try:
-            val = keyring.get_password(_KEYRING_SERVICE, _KEYRING_KEY)
+            val = keyring.get_password(_KEYRING_SERVICE, _API_KEYRING_KEY)
             if val:
                 return val
         except Exception:
@@ -172,7 +203,7 @@ def set_api_key(key: str):
     if _keyring_available():
         import keyring
         try:
-            keyring.set_password(_KEYRING_SERVICE, _KEYRING_KEY, key)
+            keyring.set_password(_KEYRING_SERVICE, _API_KEYRING_KEY, key)
             return
         except Exception:
             pass
@@ -181,14 +212,57 @@ def set_api_key(key: str):
     save(cfg)
 
 
+def get_device_secret() -> str:
+    """Retrieve the backend-issued device secret without exposing it in UI."""
+    if _keyring_available():
+        import keyring
+        try:
+            val = keyring.get_password(_KEYRING_SERVICE, _DEVICE_SECRET_KEY)
+            if val:
+                return val
+        except Exception:
+            pass
+    return load().get("device_secret", "")
+
+
+def set_device_secret(secret: str) -> None:
+    """Store the device secret securely when possible."""
+    if _keyring_available():
+        import keyring
+        try:
+            keyring.set_password(_KEYRING_SERVICE, _DEVICE_SECRET_KEY, secret)
+            cfg = load()
+            cfg.pop("device_secret", None)
+            save(cfg)
+            return
+        except Exception:
+            pass
+    cfg = load()
+    cfg["device_secret"] = secret
+    save(cfg)
+
+
+def clear_device_secret() -> None:
+    if _keyring_available():
+        import keyring
+        try:
+            keyring.delete_password(_KEYRING_SERVICE, _DEVICE_SECRET_KEY)
+        except Exception:
+            pass
+    cfg = load()
+    cfg.pop("device_secret", None)
+    save(cfg)
+
+
 # ─── Directory helpers ───────────────────────────────────────────────────────
 
 def ensure_lifecycle_dirs():
     """Create all lifecycle directories."""
+    os.makedirs(DATA_DIR, exist_ok=True)
     os.makedirs(LOG_DIR, exist_ok=True)
     os.makedirs(logs_folder(), exist_ok=True)
     for folder_fn in (incoming_folder, processing_folder,
-                      processed_folder, failed_folder, archive_folder):
+                      processed_folder, failed_folder, archive_folder, queue_folder):
         os.makedirs(folder_fn(), exist_ok=True)
     os.makedirs(spool_capture_folder(), exist_ok=True)
 
@@ -227,8 +301,11 @@ def load() -> dict:
             with open(CONFIG_FILE, "r") as f:
                 stored = json.load(f)
             merged = {**DEFAULTS, **stored}
-            if sys.platform.startswith("win") and str(merged.get("base_folder", "")).startswith("/Users/"):
-                merged["base_folder"] = os.path.expanduser("~/Documents/BillLess")
+            if sys.platform.startswith("win") and (
+                str(merged.get("base_folder", "")).startswith("/Users/")
+                or str(merged.get("base_folder", "")).startswith("/home/")
+            ):
+                merged["base_folder"] = DATA_DIR
             return merged
         except (json.JSONDecodeError, IOError):
             pass
@@ -243,6 +320,7 @@ def load_and_migrate() -> dict:
 
 def save(settings: dict):
     """Persist settings to disk (atomic write)."""
+    os.makedirs(os.path.dirname(CONFIG_FILE), exist_ok=True)
     tmp = CONFIG_FILE + ".tmp"
     try:
         with open(tmp, "w") as f:

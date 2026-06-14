@@ -21,6 +21,7 @@ from services import logger
 from services import database as db
 from services.file_manager import move_duplicate_to_processed, move_to_failed, move_to_processed, move_to_processing
 from services.parser import parse_receipt
+from services.security import sign_headers
 from utils.helpers import file_hash, human_size, validate_file_size
 from utils.validators import validate_file
 
@@ -38,6 +39,27 @@ def _validate_receipt_json(receipt_json: dict) -> tuple[bool, str]:
     if not metadata.get("raw_text", ""):
         logger.warning("Receipt raw_text is empty; parser will mark it for review")
     return True, ""
+
+
+def _agent_upload_json(parsed: dict) -> dict:
+    receipt = parsed.get("receipt", {})
+    return {
+        "device_id": get("device_id") or "",
+        "store_code": get("store_code") or get("shop_id") or "",
+        "counter_id": receipt.get("counter_id") or get("counter_id") or "",
+        "merchant_name": get("merchant_name") or parsed.get("merchant", {}).get("name", ""),
+        "receipt": {
+            "bill_number": receipt.get("bill_number", ""),
+            "date": receipt.get("date", ""),
+            "time": receipt.get("time", ""),
+            "payment_method": receipt.get("payment_method", ""),
+            "cashier": receipt.get("cashier", ""),
+            "table_id": receipt.get("table_id", ""),
+        },
+        "items": parsed.get("items", []),
+        "summary": parsed.get("summary", {}),
+        "metadata": parsed.get("metadata", {}),
+    }
 
 
 class Uploader:
@@ -152,8 +174,10 @@ class Uploader:
 
     def _upload(self, filepath: str, file_sha: str, parsed_json: str) -> tuple[bool, dict]:
         api_url = (get("api_url") or "").rstrip("/")
+        upload_url = get("upload_url") or ""
         api_key = get("api_key")
-        if get("require_https") and not api_url.startswith("https://"):
+        target_url = upload_url or f"{api_url}/api/bills/upload/"
+        if get("require_https") and not target_url.startswith("https://"):
             return False, {"error": "HTTPS is required by configuration"}
         if not os.path.exists(filepath):
             return False, {"error": "File disappeared before upload"}
@@ -169,27 +193,29 @@ class Uploader:
             parsed = json.loads(parsed_json or "{}")
         except json.JSONDecodeError:
             parsed = {}
+        upload_json = _agent_upload_json(parsed)
+        headers.update(sign_headers(upload_json))
 
         data = {
             "device_id": get("device_id") or "",
-            "store_code": get("shop_id") or "",
+            "store_code": get("store_code") or get("shop_id") or "",
+            "merchant_name": get("merchant_name") or "",
             "counter_id": parsed.get("receipt", {}).get("counter_id") or get("counter_id") or "",
             "table_id": parsed.get("receipt", {}).get("table_id", ""),
             "file_hash": file_sha,
-            "receipt_json": json.dumps(parsed, ensure_ascii=False),
-            "raw_text": parsed.get("metadata", {}).get("raw_text", ""),
-            "parser_confidence": str(parsed.get("metadata", {}).get("confidence", 0)),
-            "upload_status": parsed.get("metadata", {}).get("upload_status", "READY"),
+            "receipt_json": json.dumps(upload_json, ensure_ascii=False),
+            "raw_text": upload_json.get("metadata", {}).get("raw_text", ""),
+            "parser_confidence": str(upload_json.get("metadata", {}).get("confidence", 0)),
+            "upload_status": upload_json.get("metadata", {}).get("upload_status", "READY"),
         }
         # Keep the legacy fields until older backend deployments are retired.
         data["shop_id"] = data["store_code"]
         data["parsed_receipt"] = data["receipt_json"]
-        url = f"{api_url}/api/bills/upload/"
         mime_type = "application/pdf" if filepath.lower().endswith(".pdf") else "text/plain"
         try:
             with open(filepath, "rb") as handle:
                 response = requests.post(
-                    url,
+                    target_url,
                     headers=headers,
                     data=data,
                     files={"file": (os.path.basename(filepath), handle, mime_type)},

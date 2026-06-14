@@ -199,7 +199,7 @@ def create_receipt(filepath: str, file_hash: str, parsed: dict[str, Any]) -> int
             parsed.get("original_filename", ""),
             file_hash,
             status,
-            get("shop_id") or "",
+            get("store_code") or get("shop_id") or "",
             get("device_id") or "",
             receipt.get("counter_id") or get("counter_id") or "",
             receipt.get("bill_number") or receipt.get("invoice_number") or "",

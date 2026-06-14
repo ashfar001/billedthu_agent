@@ -61,7 +61,7 @@ class HeartbeatService:
     def _ping_backend(self):
         api_url = get("api_url").rstrip("/")
         api_key = get("api_key")
-        shop_id = get("shop_id")
+        store_code = get("store_code") or get("shop_id")
         device_id = get("device_id")
         counter_id = get("counter_id") if get("counter_id") else ""
 
@@ -74,24 +74,26 @@ class HeartbeatService:
             q_counts = {}
 
         payload = {
-            "shop_id": shop_id,
+            "store_code": store_code,
+            "shop_id": store_code,
             "device_id": device_id,
             "counter_id": counter_id,
             "agent_version": AGENT_VERSION,
-            "device_status": self._device.status if self._device else "printer",
+            "device_status": getattr(self._device, "status", "printer") if self._device else "printer",
             "queue_pending": q_counts.get("pending", 0),
             "queue_failed": q_counts.get("failed", 0),
             "total_uploaded": db.upload_success_count(),
         }
 
         headers = {
-            "Authorization": f"Token {api_key}",
             "X-Agent-Version": AGENT_VERSION,
             "X-Device-Id": device_id,
-            "X-Shop-Id": shop_id,
+            "X-Shop-Id": store_code,
             "X-Counter-Id": counter_id,
             "Content-Type": "application/json",
         }
+        if api_key:
+            headers["Authorization"] = f"Token {api_key}"
         headers.update(sign_headers(payload))
 
         try:
@@ -138,7 +140,9 @@ class HeartbeatService:
                         self._uploader.set_disabled(False)
 
             else:
-                self._handle_failure(f"HTTP {resp.status_code}")
+                self._handle_failure(
+                    f"HTTP {resp.status_code}: {resp.text[:200]}"
+                )
 
         except requests.ConnectionError:
             self._handle_failure("Connection error")

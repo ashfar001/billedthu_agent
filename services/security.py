@@ -1,119 +1,58 @@
 """
-BillLess Agent – Security Module
+Security helpers for Bill Eduthu Agent.
 
-Handles:
-  ✅ Device identity verification (HMAC signing)
-  ✅ Request signing for all API calls
-  ✅ Device secret management
-  ✅ Anti-spoofing protection
-
-Fixes: ❌ Device Identity Spoofing Risk
+Uploads and heartbeats are signed with the backend-issued device secret:
+HMAC_SHA256(device_secret, request_body + timestamp).
 """
+
+from __future__ import annotations
 
 import hashlib
 import hmac
-import os
+import json
 import time
-import uuid
+from typing import Any
 
-from config import BASE_DIR, get
-
-_SECRET_FILE = os.path.join(BASE_DIR, ".device_secret")
+from config import get, get_device_secret
 
 
-def get_device_secret() -> str:
-    """
-    Return a persistent device-unique secret.
-    Generated once and stored locally. Used for HMAC signing.
-    """
-    if os.path.exists(_SECRET_FILE):
-        try:
-            with open(_SECRET_FILE, "r") as f:
-                secret = f.read().strip()
-            if secret:
-                return secret
-        except IOError:
-            pass
-
-    # Generate new device secret
-    secret = uuid.uuid4().hex + uuid.uuid4().hex   # 64-char hex
-    try:
-        with open(_SECRET_FILE, "w") as f:
-            f.write(secret)
-        # Restrict file permissions (owner-only read/write)
-        os.chmod(_SECRET_FILE, 0o600)
-    except IOError:
-        pass
-    return secret
+def canonical_body(payload: Any) -> str:
+    if isinstance(payload, str):
+        return payload
+    return json.dumps(payload, sort_keys=True, separators=(",", ":"), ensure_ascii=False)
 
 
-def sign_request(payload: dict) -> str:
-    """
-    Create an HMAC-SHA256 signature for a request payload.
-    The backend can verify this to prevent device spoofing.
-    
-    Signature = HMAC-SHA256(device_secret, canonical_payload + timestamp)
-    """
-    secret = get_device_secret()
-    timestamp = str(int(time.time()))
-
-    # Build canonical string: sorted key=value pairs + timestamp
-    canonical_parts = []
-    for key in sorted(payload.keys()):
-        val = str(payload[key])
-        canonical_parts.append(f"{key}={val}")
-    canonical_parts.append(f"timestamp={timestamp}")
-    canonical = "&".join(canonical_parts)
-
+def sign_body(body: str, timestamp: str | None = None, secret: str | None = None) -> tuple[str, str]:
+    timestamp = timestamp or str(int(time.time()))
+    secret = secret if secret is not None else get_device_secret()
+    if not secret:
+        return timestamp, ""
     signature = hmac.new(
-        secret.encode(),
-        canonical.encode(),
+        secret.encode("utf-8"),
+        f"{body}{timestamp}".encode("utf-8"),
         hashlib.sha256,
     ).hexdigest()
+    return timestamp, signature
 
-    return f"{timestamp}.{signature}"
 
-
-def sign_headers(payload: dict) -> dict:
-    """
-    Return HTTP headers for a signed request.
-    Backend checks X-Device-Signature to verify identity.
-    """
-    device_id = get("device_id") or get("shop_id")
-    return {
-        "X-Device-Id": device_id,
-        "X-Device-Signature": sign_request(payload),
+def sign_headers(payload: Any) -> dict[str, str]:
+    body = canonical_body(payload)
+    timestamp, signature = sign_body(body)
+    headers = {
+        "X-Device-ID": get("device_id") or "",
+        "X-Timestamp": timestamp,
     }
+    if signature:
+        headers["X-Signature"] = signature
+    return headers
 
 
-def verify_signature(payload: dict, signature_header: str, secret: str,
-                     max_age_seconds: int = 300) -> bool:
-    """
-    Verify a signature (for testing / local validation).
-    In production, the backend does this.
-    """
+def verify_signature(body: Any, timestamp: str, signature: str, secret: str, max_age_seconds: int = 300) -> bool:
     try:
-        timestamp_str, provided_sig = signature_header.split(".", 1)
-        timestamp = int(timestamp_str)
-    except (ValueError, AttributeError):
+        ts = int(timestamp)
+    except (TypeError, ValueError):
         return False
-
-    # Check freshness
-    if abs(time.time() - timestamp) > max_age_seconds:
+    if abs(time.time() - ts) > max_age_seconds:
         return False
-
-    # Rebuild canonical
-    canonical_parts = []
-    for key in sorted(payload.keys()):
-        val = str(payload[key])
-        canonical_parts.append(f"{key}={val}")
-    canonical_parts.append(f"timestamp={timestamp_str}")
-    canonical = "&".join(canonical_parts)
-
-    expected = hmac.new(
-        secret.encode(),
-        canonical.encode(),
-        hashlib.sha256,
-    ).hexdigest()
-
-    return hmac.compare_digest(provided_sig, expected)
+    expected_timestamp, expected = sign_body(canonical_body(body), timestamp=timestamp, secret=secret)
+    return expected_timestamp == timestamp and hmac.compare_digest(expected, signature or "")

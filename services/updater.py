@@ -46,11 +46,10 @@ class AutoUpdater:
         api_url = get("api_url").rstrip("/")
         api_key = get("api_key")
 
-        url = f"{api_url}/api/agent/update/check/"
-        headers = {
-            "Authorization": f"Token {api_key}",
-            "X-Agent-Version": AGENT_VERSION,
-        }
+        url = f"{api_url}/api/agent/version/"
+        headers = {"X-Agent-Version": AGENT_VERSION}
+        if api_key:
+            headers["Authorization"] = f"Token {api_key}"
 
         try:
             resp = requests.get(url, headers=headers, timeout=10)

@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-BillLess Virtual Receipt Printer - Entry Point.
+Bill Eduthu Agent - Entry Point.
 
 Windows-only user-mode virtual printer workflow:
 POS print -> BillLess Printer -> silent PDF capture -> parse -> upload.
@@ -18,6 +18,8 @@ from PyQt6.QtWidgets import QApplication
 
 from config import (
     AGENT_VERSION,
+    APP_NAME,
+    DATA_DIR,
     ensure_lifecycle_dirs,
     get,
     load_and_migrate,
@@ -32,11 +34,14 @@ from services.pdf_capture import PDFCaptureService
 from services.spool_monitor import SpoolMonitor
 from services.uploader import Uploader
 from services.virtual_printer import VirtualPrinter
+from services.activation import is_activated
+from services.autostart import install_autostart
 from ui.main_window import MainWindow
+from ui.setup_wizard import SetupWizard
 
 
 def _preflight_checks() -> None:
-    logger.info(f"BillLess Virtual Receipt Printer v{AGENT_VERSION}")
+    logger.info(f"{APP_NAME} v{AGENT_VERSION}")
     logger.info(f"Platform: {platform.system()} {platform.release()}")
     if platform.system() != "Windows":
         logger.warning("This product is Windows-only. Printer capture is disabled on this OS.")
@@ -50,10 +55,12 @@ def _preflight_checks() -> None:
     else:
         logger.warning(msg)
 
+    logger.info(f"Data directory: {DATA_DIR}")
     logger.info(f"Printer name: {get('printer_name')}")
     logger.info(f"PDF capture file: {printer_capture_file()}")
     logger.info(
-        f"Shop: {get('shop_id') or '-'} | "
+        f"Store: {get('store_code') or get('shop_id') or '-'} | "
+        f"Merchant: {get('merchant_name') or '-'} | "
         f"Device: {get('device_id') or '-'} | "
         f"Counter: {get('counter_id') or '-'}"
     )
@@ -79,6 +86,21 @@ def main() -> None:
     except Exception:
         pass
 
+    app = QApplication(sys.argv)
+    app.setApplicationName(APP_NAME)
+    app.setOrganizationName("BillEduthu")
+    app.setQuitOnLastWindowClosed(False)
+
+    if not is_activated():
+        wizard = SetupWizard()
+        if wizard.exec() != SetupWizard.DialogCode.Accepted:
+            logger.warning("Setup was not completed; exiting")
+            sys.exit(0)
+
+    ensure_lifecycle_dirs()
+    if get("auto_start"):
+        install_autostart()
+
     virtual_printer = VirtualPrinter()
     printer_state = virtual_printer.ensure_installed()
     if not printer_state.available:
@@ -88,11 +110,6 @@ def main() -> None:
     pdf_capture = PDFCaptureService(on_captured=uploader.enqueue)
     spool_monitor = SpoolMonitor(printer_name=get("printer_name"))
     heartbeat = HeartbeatService(device=None, uploader=uploader)
-
-    app = QApplication(sys.argv)
-    app.setApplicationName("BillLess Virtual Receipt Printer")
-    app.setOrganizationName("BillLess")
-    app.setQuitOnLastWindowClosed(False)
 
     window = MainWindow(
         virtual_printer=virtual_printer,

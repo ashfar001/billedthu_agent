@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-BillLess Virtual Receipt Printer launcher.
+Bill Eduthu Agent launcher.
 
 Usage on Windows:
   python start.py              Run the app using the project venv
@@ -108,7 +108,10 @@ def fix_settings() -> None:
             print(f"settings.json was invalid JSON. Backup created: {backup}")
             settings = {}
 
-    default_base = str(Path.home() / "Documents" / "BillLess")
+    if platform.system() == "Windows":
+        default_base = str(Path(os.environ.get("ProgramData", r"C:\ProgramData")) / "BillEduthuAgent")
+    else:
+        default_base = str(Path.home() / "Documents" / "BillEduthuAgent")
     current_base = str(settings.get("base_folder", ""))
     if platform.system() == "Windows" and (
         not current_base
@@ -117,20 +120,68 @@ def fix_settings() -> None:
     ):
         settings["base_folder"] = default_base
 
-    settings.setdefault("config_version", 5)
-    settings.setdefault("api_url", "http://127.0.0.1:8000")
-    settings.setdefault("require_https", False)
-    settings.setdefault("shop_id", "SHOP001")
-    settings.setdefault("device_id", "DEV001")
-    settings.setdefault("counter_id", "C1")
-    settings.setdefault("printer_name", "BillLess Printer")
+    settings.setdefault("config_version", 6)
+    settings.setdefault("api_url", "https://billeduthu.in")
+    settings.setdefault("require_https", True)
+    settings.setdefault("shop_id", "")
+    settings.setdefault("store_code", "")
+    settings.setdefault("device_id", "")
+    settings.setdefault("counter_id", "")
+    settings.setdefault("merchant_name", "")
+    settings.setdefault("printer_name", "Bill Eduthu Printer")
     settings.setdefault("printer_capture_filename", "billless_capture.pdf")
-    settings.setdefault("auto_start", False)
+    settings.setdefault("auto_start", True)
 
     SETTINGS.write_text(json.dumps(settings, indent=2), encoding="utf-8")
     print(f"Updated {SETTINGS}")
     print(f"base_folder = {settings['base_folder']}")
     print(f"printer_name = {settings['printer_name']}")
+
+
+def test_backend() -> None:
+    try:
+        import requests
+    except ImportError:
+        print("requests is not installed yet. Run: python start.py --setup")
+        return
+
+    settings = {}
+    if SETTINGS.exists():
+        settings = json.loads(SETTINGS.read_text(encoding="utf-8"))
+
+    api_url = str(settings.get("api_url", "")).rstrip("/")
+    api_key = settings.get("api_key", "")
+    shop_id = settings.get("shop_id", "")
+    device_id = settings.get("device_id", "")
+    counter_id = settings.get("counter_id", "")
+    if not api_url or not api_key:
+        print("Missing api_url or api_key in settings.json")
+        return
+
+    url = f"{api_url}/api/agent/heartbeat/"
+    payload = {
+        "shop_id": shop_id,
+        "device_id": device_id,
+        "counter_id": counter_id,
+        "agent_version": "3.1.0",
+        "device_status": "printer",
+        "queue_pending": 0,
+        "queue_failed": 0,
+        "total_uploaded": 0,
+    }
+    headers = {
+        "Authorization": f"Token {api_key}",
+        "X-Agent-Version": "3.1.0",
+        "X-Device-Id": device_id,
+        "X-Shop-Id": shop_id,
+        "X-Counter-Id": counter_id,
+        "Content-Type": "application/json",
+    }
+    print(f"POST {url}")
+    print(f"Device: {device_id} | Shop: {shop_id} | Counter: {counter_id}")
+    response = requests.post(url, headers=headers, json=payload, timeout=20)
+    print(f"Status: {response.status_code}")
+    print(response.text[:1000])
 
 
 def run_app() -> None:
@@ -147,7 +198,7 @@ def build() -> None:
         print("Venv not found. Running setup first.")
         setup()
     run([py, "-m", "PyInstaller", SPEC])
-    print("\nBuild complete. Check dist/BillLessVirtualReceiptPrinter/")
+    print("\nBuild complete. Check dist/BillEduthuAgent/")
 
 
 def main() -> None:
@@ -156,11 +207,15 @@ def main() -> None:
     parser.add_argument("--build", action="store_true", help="Build executable with PyInstaller")
     parser.add_argument("--check", action="store_true", help="Check environment prerequisites")
     parser.add_argument("--fix-settings", action="store_true", help="Fix Windows settings.json paths and printer defaults")
+    parser.add_argument("--test-backend", action="store_true", help="Send a heartbeat request using settings.json")
     args = parser.parse_args()
 
     os.chdir(ROOT)
     if args.fix_settings:
         fix_settings()
+        return
+    if args.test_backend:
+        test_backend()
         return
     if args.check:
         check()

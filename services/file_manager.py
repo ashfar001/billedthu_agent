@@ -37,7 +37,7 @@ def generate_unique_name(original_path: str) -> str:
     Generate the BillLess receipt filename:
       SHOP001_DEV001_C1_20260506_132500.pdf
     """
-    shop_id = get("shop_id") or "SHOP"
+    shop_id = get("store_code") or get("shop_id") or "SHOP"
     device_id = get("device_id") or "DEV"
     counter_id = get("counter_id") or "C0"
     now = datetime.now()
@@ -59,7 +59,7 @@ def move_to_processing(filepath: str) -> str | None:
         return None
 
     basename = os.path.basename(filepath)
-    expected_prefix = f"{get('shop_id') or 'SHOP'}_{get('device_id') or 'DEV'}_{get('counter_id') or 'C0'}_"
+    expected_prefix = f"{get('store_code') or get('shop_id') or 'SHOP'}_{get('device_id') or 'DEV'}_{get('counter_id') or 'C0'}_"
     new_name = basename if basename.startswith(expected_prefix) else generate_unique_name(filepath)
     dest = os.path.join(processing_folder(), new_name)
 

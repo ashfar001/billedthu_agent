@@ -13,7 +13,7 @@ import sys
 import platform
 import stat
 
-from config import BASE_DIR
+from config import APP_NAME, BASE_DIR
 from services import logger
 
 
@@ -161,17 +161,20 @@ def _remove_linux() -> bool:
 def _install_windows() -> bool:
     try:
         import winreg
-        python = sys.executable
-        main_py = os.path.join(BASE_DIR, "main.py")
+        if getattr(sys, "frozen", False):
+            command = f'"{sys.executable}"'
+        else:
+            python = sys.executable
+            main_py = os.path.join(BASE_DIR, "main.py")
+            command = f'"{python}" "{main_py}"'
         key = winreg.OpenKey(
             winreg.HKEY_CURRENT_USER,
             r"Software\Microsoft\Windows\CurrentVersion\Run",
             0, winreg.KEY_SET_VALUE,
         )
-        winreg.SetValueEx(key, "BillLessAgent", 0, winreg.REG_SZ,
-                          f'"{python}" "{main_py}"')
+        winreg.SetValueEx(key, "BillEduthuAgent", 0, winreg.REG_SZ, command)
         winreg.CloseKey(key)
-        logger.info("✅ Windows auto-start registry entry created")
+        logger.info(f"Windows auto-start registry entry created for {APP_NAME}")
         return True
     except Exception as exc:
         logger.error(f"❌ Failed to install Windows auto-start: {exc}")
@@ -187,7 +190,7 @@ def _remove_windows() -> bool:
             0, winreg.KEY_SET_VALUE,
         )
         try:
-            winreg.DeleteValue(key, "BillLessAgent")
+            winreg.DeleteValue(key, "BillEduthuAgent")
         except FileNotFoundError:
             pass
         winreg.CloseKey(key)

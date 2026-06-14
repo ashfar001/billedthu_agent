@@ -1,11 +1,13 @@
 """
-Modern PyQt6 dashboard for the BillLess Virtual Receipt Printer.
+Modern PyQt6 dashboard for the Bill Eduthu Agent.
 """
 
 from __future__ import annotations
 
 import os
 import json
+import subprocess
+import sys
 
 from PyQt6.QtCore import Qt, QTimer, pyqtSignal
 from PyQt6.QtGui import QColor
@@ -18,6 +20,7 @@ from PyQt6.QtWidgets import (
     QLabel,
     QMainWindow,
     QMenu,
+    QMessageBox,
     QPlainTextEdit,
     QPushButton,
     QSizePolicy,
@@ -26,10 +29,13 @@ from PyQt6.QtWidgets import (
     QWidget,
 )
 
-from config import AGENT_VERSION, get, printer_capture_file
+from config import AGENT_VERSION, APP_NAME, get, incoming_folder, printer_capture_file
 from services import database as db
 from services import logger
+from services.activation import reset_activation
+from services.updater import AutoUpdater
 from ui.settings_dialog import SettingsDialog
+from ui.setup_wizard import SetupWizard
 
 
 _INK = "#201b16"
@@ -134,7 +140,7 @@ class MainWindow(QMainWindow):
         self._uploader = uploader
         self._heartbeat = heartbeat
 
-        self.setWindowTitle("BillLess Virtual Receipt Printer")
+        self.setWindowTitle(APP_NAME)
         self.setMinimumSize(760, 620)
         self.resize(940, 700)
         self.setStyleSheet(_STYLE)
@@ -158,9 +164,9 @@ class MainWindow(QMainWindow):
 
         header = QHBoxLayout()
         title_box = QVBoxLayout()
-        title = QLabel("BillLess Virtual Receipt Printer")
+        title = QLabel(APP_NAME)
         title.setProperty("class", "title")
-        subtitle = QLabel("Windows print capture, receipt parsing, and backend activation")
+        subtitle = QLabel("Windows print capture, receipt parsing, queueing, and secure upload")
         subtitle.setProperty("class", "subtle")
         title_box.addWidget(title)
         title_box.addWidget(subtitle)
@@ -215,10 +221,32 @@ class MainWindow(QMainWindow):
         last_layout.addWidget(self._last_meta)
         grid.addWidget(self._last_card, 0, 2)
 
+        self._identity_card = QFrame()
+        self._identity_card.setProperty("class", "card")
+        _shadow(self._identity_card)
+        identity_layout = QVBoxLayout(self._identity_card)
+        identity_layout.setContentsMargins(16, 14, 16, 14)
+        identity_label = QLabel("Agent Identity")
+        identity_label.setProperty("class", "kicker")
+        self._identity_value = QLabel("-")
+        self._identity_value.setWordWrap(True)
+        self._identity_value.setProperty("class", "subtle")
+        identity_layout.addWidget(identity_label)
+        identity_layout.addWidget(self._identity_value)
+        grid.addWidget(self._identity_card, 2, 0, 1, 3)
+
         actions = QHBoxLayout()
         self._test_button = QPushButton("Test Print")
         self._test_button.clicked.connect(self._test_print)
         actions.addWidget(self._test_button)
+        self._connection_button = QPushButton("Test Connection")
+        self._connection_button.setProperty("class", "secondary")
+        self._connection_button.clicked.connect(self._test_connection)
+        actions.addWidget(self._connection_button)
+        self._folder_button = QPushButton("Open Incoming Folder")
+        self._folder_button.setProperty("class", "secondary")
+        self._folder_button.clicked.connect(self._open_incoming_folder)
+        actions.addWidget(self._folder_button)
         self._settings_button = QPushButton("Settings")
         self._settings_button.setProperty("class", "secondary")
         self._settings_button.clicked.connect(self._open_settings)
@@ -234,7 +262,7 @@ class MainWindow(QMainWindow):
         actions.addStretch()
         root.addLayout(actions)
 
-        capture = QLabel(f"Capture file: {printer_capture_file()}")
+        capture = QLabel(f"Capture file: {printer_capture_file()} | Watch folder: {incoming_folder()}")
         capture.setProperty("class", "subtle")
         capture.setWordWrap(True)
         root.addWidget(capture)
@@ -319,6 +347,11 @@ class MainWindow(QMainWindow):
         self._queue_value.setText(str(stats["queued"]))
         self._success_value.setText(str(stats["success"]))
         self._failed_value.setText(str(stats["failed"]))
+        self._identity_value.setText(
+            f"{get('merchant_name') or '-'} | store {get('store_code') or get('shop_id') or '-'} | "
+            f"counter {get('counter_id') or '-'} | device {get('device_id') or '-'} | "
+            f"watch {incoming_folder()}"
+        )
 
         last = db.last_receipt()
         if last:
@@ -355,9 +388,57 @@ class MainWindow(QMainWindow):
         self._virtual_printer.ensure_installed()
         self._virtual_printer.test_print()
 
+    def _test_connection(self) -> None:
+        self._heartbeat._ping_backend()
+        QMessageBox.information(
+            self,
+            "Connection",
+            "Backend is online." if self._heartbeat.backend_online else "Backend is offline. Receipts will stay queued.",
+        )
+
+    def _open_incoming_folder(self) -> None:
+        folder = incoming_folder()
+        try:
+            if sys.platform.startswith("win"):
+                os.startfile(folder)
+            elif sys.platform == "darwin":
+                subprocess.Popen(["open", folder])
+            else:
+                subprocess.Popen(["xdg-open", folder])
+        except Exception as exc:
+            QMessageBox.warning(self, "Open Folder", str(exc))
+
     def _open_settings(self) -> None:
         dialog = SettingsDialog(self)
         dialog.exec()
+
+    def _reconfigure(self) -> None:
+        wizard = SetupWizard(self)
+        if wizard.exec() == SetupWizard.DialogCode.Accepted:
+            self._virtual_printer.ensure_installed()
+            self._refresh()
+
+    def _reset_setup(self) -> None:
+        confirm = QMessageBox.question(
+            self,
+            "Reset Setup",
+            "Reset this device activation? You will need a new setup code.",
+        )
+        if confirm == QMessageBox.StandardButton.Yes:
+            reset_activation()
+            self._reconfigure()
+
+    def _toggle_pause_uploads(self) -> None:
+        disabled = not getattr(self._uploader, "_disabled", False)
+        self._uploader.set_disabled(disabled)
+        logger.warning("Uploads paused" if disabled else "Uploads resumed")
+
+    def _check_update(self) -> None:
+        update = AutoUpdater().check_for_update()
+        if update:
+            QMessageBox.information(self, "Update Available", f"New version available: {update.get('version')}")
+        else:
+            QMessageBox.information(self, "Update", "No update available.")
 
     def _start_services(self) -> None:
         self._virtual_printer.ensure_installed()
@@ -378,12 +459,26 @@ class MainWindow(QMainWindow):
         if not QSystemTrayIcon.isSystemTrayAvailable():
             return
         self._tray = QSystemTrayIcon(self)
-        self._tray.setToolTip("BillLess Virtual Receipt Printer")
+        self._tray.setToolTip(APP_NAME)
         menu = QMenu()
-        show_action = menu.addAction("Show")
+        show_action = menu.addAction("Open Dashboard")
         show_action.triggered.connect(self.show)
+        pause_action = menu.addAction("Pause Uploads")
+        pause_action.triggered.connect(self._toggle_pause_uploads)
         test_action = menu.addAction("Test Print")
         test_action.triggered.connect(self._test_print)
+        connection_action = menu.addAction("Test Connection")
+        connection_action.triggered.connect(self._test_connection)
+        logs_action = menu.addAction("View Logs")
+        logs_action.triggered.connect(self.show)
+        restart_action = menu.addAction("Restart Agent")
+        restart_action.triggered.connect(self._restart_agent)
+        counter_action = menu.addAction("Change Counter")
+        counter_action.triggered.connect(self._reconfigure)
+        reset_action = menu.addAction("Logout / Reset Setup")
+        reset_action.triggered.connect(self._reset_setup)
+        update_action = menu.addAction("Check for Updates")
+        update_action.triggered.connect(self._check_update)
         quit_action = menu.addAction("Quit")
         quit_action.triggered.connect(QApplication.quit)
         self._tray.setContextMenu(menu)
@@ -395,6 +490,10 @@ class MainWindow(QMainWindow):
             self.show()
             self.raise_()
             self.activateWindow()
+
+    def _restart_agent(self) -> None:
+        subprocess.Popen([sys.executable] + sys.argv)
+        QApplication.quit()
 
     def closeEvent(self, event) -> None:
         if hasattr(self, "_tray") and self._tray.isVisible():
