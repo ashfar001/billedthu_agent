@@ -5,6 +5,7 @@ Setup-code activation for Bill Eduthu Agent.
 from __future__ import annotations
 
 import platform
+import re
 from dataclasses import dataclass
 
 import requests
@@ -25,7 +26,7 @@ def is_activated() -> bool:
 
 
 def activate_with_setup_code(setup_code: str, api_url: str | None = None, machine_name: str | None = None) -> ActivationResult:
-    setup_code = setup_code.strip().upper()
+    setup_code = re.sub(r"\s+", "", setup_code or "").strip().upper()
     if not setup_code:
         return ActivationResult(False, "Enter a setup code.")
 
@@ -48,7 +49,9 @@ def activate_with_setup_code(setup_code: str, api_url: str | None = None, machin
         return ActivationResult(False, str(exc))
 
     if response.status_code not in (200, 201):
-        return ActivationResult(False, "Invalid or expired setup code. Contact Bill Eduthu support.")
+        message = _activation_error_message(response)
+        logger.warning(f"Activation failed HTTP {response.status_code}: {response.text[:500]}")
+        return ActivationResult(False, message)
 
     data = response.json() if response.headers.get("content-type", "").startswith("application/json") else {}
     required = ("device_id", "device_secret", "counter_id")
@@ -79,6 +82,23 @@ def activate_with_setup_code(setup_code: str, api_url: str | None = None, machin
         f"counter {cfg.get('counter_id')}"
     )
     return ActivationResult(True, "Activation complete.", data)
+
+
+def _activation_error_message(response: requests.Response) -> str:
+    fallback = f"Activation failed: HTTP {response.status_code}"
+    try:
+        data = response.json()
+    except ValueError:
+        text = response.text.strip()
+        return f"{fallback}: {text[:180]}" if text else fallback
+
+    for key in ("detail", "error", "message", "setup_code", "non_field_errors"):
+        value = data.get(key) if isinstance(data, dict) else None
+        if isinstance(value, list):
+            value = " ".join(str(item) for item in value)
+        if value:
+            return f"{fallback}: {value}"
+    return f"{fallback}: {str(data)[:180]}"
 
 
 def reset_activation() -> None:
