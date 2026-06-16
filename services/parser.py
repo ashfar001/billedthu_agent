@@ -27,6 +27,8 @@ _GSTIN = r"\b\d{2}[A-Z]{5}\d{4}[A-Z][1-9A-Z]Z[0-9A-Z]\b"
 _PHONE = r"(?:\+?91[-\s]?)?[6-9]\d{9}\b"
 _DATE = r"\b(\d{1,2}[-/.]\d{1,2}[-/.]\d{2,4}|\d{4}[-/.]\d{1,2}[-/.]\d{1,2})\b"
 _TIME = r"\b(\d{1,2}:\d{2}(?::\d{2})?\s*(?:AM|PM|am|pm)?)\b"
+_PINCODE = r"\b[1-9]\d{5}\b"
+_DATE_TEXT = r"\b(\d{1,2}\s+(?:Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Sept|Oct|Nov|Dec)[a-z]*\s+\d{4})\b"
 
 _SUMMARY_LABELS = (
     "subtotal",
@@ -47,6 +49,24 @@ _SUMMARY_LABELS = (
     "net total",
     "paid",
     "change",
+)
+_ADDRESS_WORDS = (
+    "road",
+    "rd",
+    "street",
+    "layout",
+    "nagar",
+    "colony",
+    "market",
+    "bengaluru",
+    "bangalore",
+    "karnataka",
+    "chennai",
+    "hyderabad",
+    "mumbai",
+    "delhi",
+    "kochi",
+    "service rd",
 )
 _NON_ITEM_WORDS = (
     "gstin",
@@ -70,6 +90,8 @@ _NON_ITEM_WORDS = (
     "rate",
     "price",
     "amount",
+    "gst no",
+    "gst",
 )
 
 
@@ -371,9 +393,13 @@ def _detect_address(lines: list[str]) -> str:
             continue
         if any(word in lower for word in ("bill", "invoice", "receipt", "date", "time", "cashier", "payment")):
             continue
+        if re.search(r"\bitem\b.*\b(price|qty|quantity|total)\b", lower):
+            continue
+        if _could_be_item_line(stripped):
+            continue
         if re.search(_GSTIN, stripped, re.I) or re.search(_PHONE, stripped):
             continue
-        if any(word in lower for word in ("road", "street", "nagar", "colony", "market", "near", "opp", "floor")):
+        if any(word in lower for word in ("road", "rd", "street", "layout", "nagar", "colony", "market", "near", "opp", "floor", "bengaluru", "bangalore", "karnataka")):
             parts.append(stripped)
         elif len(parts) and len(parts) < 3 and not _looks_like_money_line(stripped):
             parts.append(stripped)
@@ -383,13 +409,16 @@ def _detect_address(lines: list[str]) -> str:
 def _parse_receipt_header(receipt_json: dict[str, Any], text: str) -> None:
     receipt = receipt_json["receipt"]
     receipt["bill_number"] = _first_match(text, [
-        r"\b(?:bill|receipt)\s*(?:no|number|#)?\s*[:#-]?\s*([A-Z0-9][A-Z0-9/-]{1,})",
+        r"\bbill\s*(?:no|number|#)?\s*[:#-]?\s*([A-Z0-9][A-Z0-9/-]{1,})",
+        r"\breceipt\s*(?:no|number|#)\s*[:#-]?\s*([A-Z0-9][A-Z0-9/-]{1,})",
         r"\b(?:rcpt|token)\s*[:#-]?\s*([A-Z0-9][A-Z0-9/-]{1,})",
     ])
     receipt["invoice_number"] = _first_match(text, [
         r"\b(?:invoice|inv)\s*(?:no|number|#)?\s*[:#-]?\s*([A-Z0-9][A-Z0-9/-]{1,})",
     ])
-    receipt["date"] = _first_match(text, [_DATE])
+    if not receipt["bill_number"] and receipt["invoice_number"]:
+        receipt["bill_number"] = receipt["invoice_number"]
+    receipt["date"] = _first_match(text, [_DATE, _DATE_TEXT])
     receipt["time"] = _first_match(text, [_TIME])
     receipt["payment_method"] = _first_match(text, [
         r"\b(?:payment|mode|paid by)\s*[:#-]?\s*(cash|card|upi|wallet|credit|debit|net banking)",
@@ -399,24 +428,25 @@ def _parse_receipt_header(receipt_json: dict[str, Any], text: str) -> None:
         r"\b(?:counter|terminal|pos)\s*(?:id|no|number)?\s*[:#-]?\s*([A-Z0-9-]+)",
     ])
     receipt["table_id"] = _first_match(text, [
-        r"\b(?:kot\s*)?table\s*(?:no|number|#)?\s*[:#-]?\s*([A-Z0-9-]+)",
+        r"\b(?:kot\s*)?table\s*(?:no|number|#)?\s*[:#-]?\s*#?\s*([A-Z0-9-]+)",
         r"\btbl\s*[:#-]?\s*([A-Z0-9-]+)",
         r"\bdine\s*in\s*[:#-]?\s*([A-Z0-9-]+)",
         r"\broom\s*[:#-]?\s*([A-Z0-9-]+)",
     ])
     receipt["cashier"] = _first_match(text, [r"\bcashier\s*[:#-]?\s*([A-Za-z0-9 ._-]{2,40})"])
     receipt["customer_name"] = _first_match(text, [
-        r"\bcustomer\s*(?:name)?\s*[:#-]?\s*([A-Za-z][A-Za-z ._-]{1,50})",
+        r"\bcustomer\s*(?:name)?\s*[:#-]?\s*([A-Za-z][A-Za-z ._-]{1,50})(?=\s+(?:invoice|bill|date|table)\b|$)",
+        r"\bname\s*[:#-]?\s*([A-Za-z][A-Za-z ._-]{1,50})(?=\s+(?:invoice|bill|date|table)\b|$)",
     ])
 
 
 def _parse_summary(receipt_json: dict[str, Any], text: str) -> None:
     summary = receipt_json["summary"]
-    summary["subtotal"] = _money_after(text, ["subtotal", "sub total", "taxable amount"])
+    summary["subtotal"] = _money_after(text, ["subtotal", "sub total", "sub-total", "taxable amount"])
     summary["discount"] = _money_after(text, ["discount", "disc"])
-    summary["cgst"] = _money_after(text, ["cgst"])
-    summary["sgst"] = _money_after(text, ["sgst"])
-    summary["igst"] = _money_after(text, ["igst"])
+    summary["cgst"] = _tax_amount_after(text, "cgst")
+    summary["sgst"] = _tax_amount_after(text, "sgst")
+    summary["igst"] = _tax_amount_after(text, "igst")
     summary["round_off"] = _money_after(text, ["round off", "roundoff", "rounded"])
 
     explicit_tax = _money_after(text, ["tax total", "total tax", "gst total"])
@@ -429,7 +459,7 @@ def _parse_summary(receipt_json: dict[str, Any], text: str) -> None:
         ["amount due"],
         ["total amount"],
         ["total"],
-        ["subtotal", "sub total"],
+        ["subtotal", "sub total", "sub-total"],
     ):
         value = _money_after(text, labels)
         if value is not None:
@@ -497,6 +527,10 @@ def _parse_item_line(line: str) -> tuple[str, float, float | None, float | None,
     if not amount_values:
         return None
 
+    column_item = _parse_price_qty_total_line(stripped, money_matches, amount_values, tax_rate)
+    if column_item:
+        return column_item
+
     total_price = amount_values[-1]
     before_total = stripped[: money_matches[-1].start()].strip(" -:\t")
     if not before_total:
@@ -511,27 +545,54 @@ def _parse_item_line(line: str) -> tuple[str, float, float | None, float | None,
         re.I,
     )
     if structured:
-        name = structured.group(1).strip(" -:\t")
+        name = _clean_item_name(structured.group(1))
         qty = _to_float(structured.group(2)) or 1.0
         unit_price = _to_float(structured.group(3))
     else:
         qty_match = re.search(r"\b(?:qty|qnty)\s*[:x-]?\s*(\d+(?:\.\d+)?)\b", before_total, re.I)
         if qty_match:
             qty = _to_float(qty_match.group(1)) or 1.0
-            name = before_total[: qty_match.start()].strip(" -:\t")
+            name = _clean_item_name(before_total[: qty_match.start()])
         else:
             tail_qty = re.search(r"\s+(\d+(?:\.\d+)?)\s*(?:x|pcs|nos?)?$", before_total, re.I)
             if tail_qty and _quantity_is_plausible(tail_qty.group(1), total_price):
                 qty = _to_float(tail_qty.group(1)) or 1.0
-                name = before_total[: tail_qty.start()].strip(" -:\t")
+                name = _clean_item_name(before_total[: tail_qty.start()])
             else:
-                name = before_total
+                name = _clean_item_name(before_total)
 
     if not name:
         return None
     if unit_price is not None and _same_number(unit_price, qty):
         unit_price = None
-    return name[:120], qty, unit_price, total_price, tax_rate
+    return _clean_item_name(name)[:120], qty, unit_price, total_price, tax_rate
+
+
+def _parse_price_qty_total_line(
+    line: str,
+    money_matches: list[re.Match],
+    amount_values: list[float],
+    tax_rate: float | None,
+) -> tuple[str, float, float | None, float | None, float | None] | None:
+    if len(amount_values) < 3 or len(money_matches) < 3:
+        return None
+
+    unit_price = amount_values[-3]
+    quantity = amount_values[-2]
+    total_price = amount_values[-1]
+    if unit_price is None or quantity is None or total_price is None:
+        return None
+    if quantity <= 0 or quantity > 999 or unit_price <= 0 or total_price <= 0:
+        return None
+    if unit_price < quantity:
+        return None
+    if abs((unit_price * quantity) - total_price) > max(1.0, total_price * 0.03):
+        return None
+
+    name = _clean_item_name(line[: money_matches[-3].start()])
+    if not name:
+        return None
+    return name[:120], quantity, unit_price, total_price, tax_rate
 
 
 def _could_be_item_line(line: str) -> bool:
@@ -541,6 +602,8 @@ def _could_be_item_line(line: str) -> bool:
     if any(label in lower for label in _SUMMARY_LABELS):
         return False
     if any(word in lower for word in _NON_ITEM_WORDS):
+        return False
+    if _looks_like_address_line(line):
         return False
     if re.search(_GSTIN, line, re.I) or re.search(_PHONE, line) or re.search(_DATE, line):
         return False
@@ -552,6 +615,8 @@ def _valid_item_name(name: str) -> bool:
     if len(name) < 2 or not re.search(r"[A-Za-z]", name):
         return False
     if any(word in lower for word in _NON_ITEM_WORDS):
+        return False
+    if _looks_like_address_line(name):
         return False
     if re.search(_GSTIN, name, re.I) or re.search(_PHONE, name):
         return False
@@ -639,7 +704,8 @@ def _first_match(text: str, patterns: list[str], flags: int = re.I) -> str:
 def _money_after(text: str, labels: list[str]) -> float | None:
     matches: list[tuple[int, float]] = []
     for label in labels:
-        pattern = rf"\b{re.escape(label)}\b\s*[:#-]?\s*(?:rs\.?|inr|₹)?\s*{_MONEY}"
+        label_pattern = re.escape(label).replace(r"\ ", r"[\s-]*")
+        pattern = rf"\b{label_pattern}\b\s*[:#-]?\s*(?:rs\.?|inr|₹)?\s*{_MONEY}"
         for match in re.finditer(pattern, text, re.I):
             value = _to_float(match.group(1))
             if value is not None:
@@ -648,6 +714,19 @@ def _money_after(text: str, labels: list[str]) -> float | None:
         return None
     matches.sort(key=lambda item: item[0])
     return matches[-1][1]
+
+
+def _tax_amount_after(text: str, label: str) -> float | None:
+    matches: list[tuple[int, float]] = []
+    pattern = rf"\b{re.escape(label)}\b[^\n\r₹$]*(?:rs\.?|inr|₹)\s*{_MONEY}"
+    for match in re.finditer(pattern, text, re.I):
+        value = _to_float(match.group(1))
+        if value is not None:
+            matches.append((match.start(), value))
+    if matches:
+        matches.sort(key=lambda item: item[0])
+        return matches[-1][1]
+    return _money_after(text, [label])
 
 
 def _to_float(value: str | int | float | None) -> float | None:
@@ -682,6 +761,18 @@ def _extract_tax_rate(line: str) -> float | None:
 
 def _collapse(value: str) -> str:
     return re.sub(r"\s+", " ", value or "").strip()
+
+
+def _clean_item_name(value: str) -> str:
+    cleaned = _collapse(value)
+    cleaned = re.sub(r"[\s=:%₹$.-]+$", "", cleaned)
+    return cleaned.strip()
+
+
+def _looks_like_address_line(value: str) -> bool:
+    lower = value.lower()
+    has_address_word = any(re.search(rf"\b{re.escape(word)}\b", lower) for word in _ADDRESS_WORDS)
+    return bool(re.search(_PINCODE, value) and has_address_word)
 
 
 def _looks_like_money_line(line: str) -> bool:
