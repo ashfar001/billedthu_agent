@@ -9,6 +9,9 @@ from __future__ import annotations
 
 import os
 import re
+import shutil
+import subprocess
+import tempfile
 from decimal import Decimal, InvalidOperation
 from typing import Any
 
@@ -99,6 +102,9 @@ def extract_raw_text(filepath: str) -> tuple[str, str]:
         text = _extract_pdf_text(filepath)
         if text.strip():
             return text, "PDF_TEXT"
+        local_ocr_text = _local_tesseract_ocr(filepath)
+        if local_ocr_text.strip():
+            return local_ocr_text, "LOCAL_TESSERACT_OCR"
         ocr_text = _google_vision_ocr(filepath)
         return ocr_text, "GOOGLE_VISION_OCR" if ocr_text else "EMPTY_PDF"
     if ext in {".txt", ".text", ".csv"}:
@@ -188,6 +194,68 @@ def _google_vision_ocr(filepath: str) -> str:
     except Exception as exc:
         logger.warning(f"Google Vision OCR failed: {exc}")
         return ""
+
+
+def _local_tesseract_ocr(filepath: str) -> str:
+    if not get("local_ocr_enabled"):
+        logger.info("PDF has no selectable text; local OCR is disabled")
+        return ""
+
+    tesseract = get("tesseract_cmd") or shutil.which("tesseract")
+    if not tesseract:
+        logger.warning("PDF has no selectable text; install Tesseract OCR for free local OCR fallback")
+        return ""
+
+    try:
+        image_paths = _render_pdf_pages_for_ocr(filepath)
+        if not image_paths:
+            return ""
+        texts = []
+        for image_path in image_paths:
+            result = subprocess.run(
+                [tesseract, image_path, "stdout", "--psm", "6"],
+                capture_output=True,
+                text=True,
+                timeout=45,
+                check=False,
+            )
+            if result.returncode == 0 and result.stdout.strip():
+                texts.append(result.stdout.strip())
+            elif result.stderr.strip():
+                logger.debug(f"Tesseract OCR warning: {result.stderr.strip()[:200]}")
+        return "\n".join(texts).strip()
+    except subprocess.TimeoutExpired:
+        logger.warning("Local OCR timed out")
+        return ""
+    except Exception as exc:
+        logger.warning(f"Local OCR failed: {exc}")
+        return ""
+    finally:
+        for path in locals().get("image_paths", []):
+            try:
+                os.remove(path)
+            except OSError:
+                pass
+
+
+def _render_pdf_pages_for_ocr(filepath: str) -> list[str]:
+    try:
+        import fitz
+
+        paths = []
+        max_pages = int(get("local_ocr_max_pages") or 3)
+        with fitz.open(filepath) as doc:
+            for index in range(min(max_pages, doc.page_count)):
+                page = doc.load_page(index)
+                pix = page.get_pixmap(matrix=fitz.Matrix(3, 3), alpha=False)
+                fd, path = tempfile.mkstemp(prefix="bill_eduthu_ocr_", suffix=".png")
+                os.close(fd)
+                pix.save(path)
+                paths.append(path)
+        return paths
+    except Exception as exc:
+        logger.warning(f"Could not render PDF for local OCR: {exc}")
+        return []
 
 
 def _ocr_image_payloads(filepath: str) -> list[bytes]:

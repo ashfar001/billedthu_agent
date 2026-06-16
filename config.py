@@ -78,6 +78,9 @@ DEFAULTS = {
     "spool_poll_interval": 1,
     "backend_timeout_seconds": 30,
     "google_vision_enabled": False,
+    "local_ocr_enabled": True,
+    "local_ocr_max_pages": 3,
+    "tesseract_cmd": "",
     "activated": False,
     "machine_name": platform.node(),
     "settings_password_hash": os.environ.get(

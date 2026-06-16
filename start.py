@@ -131,6 +131,9 @@ def fix_settings() -> None:
     settings.setdefault("merchant_name", "")
     settings.setdefault("printer_name", "Bill Eduthu Printer")
     settings.setdefault("printer_capture_filename", "billless_capture.pdf")
+    settings.setdefault("local_ocr_enabled", True)
+    settings.setdefault("local_ocr_max_pages", 3)
+    settings.setdefault("tesseract_cmd", "")
     settings.setdefault("auto_start", True)
 
     SETTINGS.write_text(json.dumps(settings, indent=2), encoding="utf-8")

@@ -55,8 +55,12 @@ class SettingsDialog(QDialog):
         self._counter_id = QLineEdit(self._cfg.get("counter_id", ""))
         self._counter_id.setReadOnly(True)
         self._base_folder = QLineEdit(self._cfg.get("base_folder", ""))
+        self._tesseract_cmd = QLineEdit(self._cfg.get("tesseract_cmd", ""))
+        self._tesseract_cmd.setPlaceholderText(r"C:\Program Files\Tesseract-OCR\tesseract.exe")
         self._auto_start = QCheckBox("Start Bill Eduthu when Windows starts")
         self._auto_start.setChecked(bool(self._cfg.get("auto_start", True)))
+        self._local_ocr = QCheckBox("Use free local OCR for image-only PDFs")
+        self._local_ocr.setChecked(bool(self._cfg.get("local_ocr_enabled", True)))
 
         form.addRow("API URL", self._api_url)
         form.addRow("Merchant", self._merchant_name)
@@ -64,6 +68,8 @@ class SettingsDialog(QDialog):
         form.addRow("Device ID", self._device_id)
         form.addRow("Counter ID", self._counter_id)
         form.addRow("Base folder", self._base_folder)
+        form.addRow("Tesseract path", self._tesseract_cmd)
+        form.addRow("", self._local_ocr)
         form.addRow("", self._auto_start)
         root.addLayout(form)
 
@@ -82,6 +88,8 @@ class SettingsDialog(QDialog):
         cfg.update({
             "api_url": self._api_url.text().strip(),
             "base_folder": self._base_folder.text().strip(),
+            "tesseract_cmd": self._tesseract_cmd.text().strip(),
+            "local_ocr_enabled": self._local_ocr.isChecked(),
             "auto_start": self._auto_start.isChecked(),
         })
         save(cfg)
