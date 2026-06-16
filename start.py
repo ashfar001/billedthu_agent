@@ -120,8 +120,9 @@ def fix_settings() -> None:
     ):
         settings["base_folder"] = default_base
 
-    settings.setdefault("config_version", 6)
-    settings.setdefault("api_url", "https://billeduthu.in")
+    settings.setdefault("config_version", 7)
+    if not settings.get("api_url") or settings.get("api_url") == "https://billeduthu.in":
+        settings["api_url"] = "https://billeduthu.onrender.com"
     settings.setdefault("require_https", True)
     settings.setdefault("shop_id", "")
     settings.setdefault("store_code", "")

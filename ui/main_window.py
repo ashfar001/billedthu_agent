@@ -34,7 +34,7 @@ from services import database as db
 from services import logger
 from services.activation import reset_activation
 from services.updater import AutoUpdater
-from ui.settings_dialog import SettingsDialog
+from ui.settings_dialog import SettingsDialog, require_settings_unlock
 from ui.setup_wizard import SetupWizard
 
 
@@ -409,6 +409,8 @@ class MainWindow(QMainWindow):
             QMessageBox.warning(self, "Open Folder", str(exc))
 
     def _open_settings(self) -> None:
+        if not require_settings_unlock(self):
+            return
         dialog = SettingsDialog(self)
         dialog.exec()
 

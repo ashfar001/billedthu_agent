@@ -14,6 +14,7 @@ import json
 import os
 import platform
 import sys
+import hashlib
 
 # ─── Paths ───────────────────────────────────────────────────────────────────
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -32,9 +33,11 @@ DB_FILE = os.path.join(DATA_DIR, "agent.db")
 
 # ─── Version ─────────────────────────────────────────────────────────────────
 AGENT_VERSION = "3.1.0"
-CONFIG_VERSION = 6
+CONFIG_VERSION = 7
 APP_NAME = "Bill Eduthu Agent"
 PRINTER_NAME = "Bill Eduthu Printer"
+PRODUCTION_API_URL = os.environ.get("BILL_EDUTHU_API_URL", "https://billeduthu.onrender.com")
+_DEFAULT_SETTINGS_PASSWORD_HASH = "948440723ee05890f597c8a0a727762bd0d9cff69f894cc2b2c0681ffa3ad7c8"
 
 # ─── Keyring service name ────────────────────────────────────────────────────
 _KEYRING_SERVICE = "BillEduthuAgent"
@@ -44,7 +47,7 @@ _DEVICE_SECRET_KEY = "device_secret"
 # ─── Defaults ────────────────────────────────────────────────────────────────
 DEFAULTS = {
     "config_version": CONFIG_VERSION,
-    "api_url": "https://billeduthu.in",
+    "api_url": PRODUCTION_API_URL,
     "upload_url": "",
     "shop_id": "",
     "store_code": "",
@@ -77,6 +80,10 @@ DEFAULTS = {
     "google_vision_enabled": False,
     "activated": False,
     "machine_name": platform.node(),
+    "settings_password_hash": os.environ.get(
+        "BILL_EDUTHU_SETTINGS_PASSWORD_HASH",
+        _DEFAULT_SETTINGS_PASSWORD_HASH,
+    ),
 }
 
 # ─── Derived folder paths (computed from base_folder) ────────────────────────
@@ -150,6 +157,12 @@ _MIGRATIONS = {
         "printer_name": PRINTER_NAME,
         "google_vision_enabled": False,
         "machine_name": platform.node(),
+    }),
+    6: lambda cfg: cfg.update({
+        "api_url": PRODUCTION_API_URL,
+        "settings_password_hash": cfg.get("settings_password_hash")
+        or os.environ.get("BILL_EDUTHU_SETTINGS_PASSWORD_HASH")
+        or _DEFAULT_SETTINGS_PASSWORD_HASH,
     }),
 }
 
@@ -290,6 +303,12 @@ def validate_api_url() -> tuple[bool, str]:
     if require_https and not url.startswith("https://"):
         return False, f"HTTPS required but URL is: {url}"
     return True, url
+
+
+def verify_settings_password(password: str) -> bool:
+    configured_hash = load().get("settings_password_hash") or _DEFAULT_SETTINGS_PASSWORD_HASH
+    entered_hash = hashlib.sha256((password or "").encode("utf-8")).hexdigest()
+    return entered_hash == configured_hash
 
 
 # ─── Load / Save ─────────────────────────────────────────────────────────────

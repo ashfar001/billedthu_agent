@@ -9,8 +9,8 @@ from PyQt6.QtWidgets import (
     QDialog,
     QFormLayout,
     QLabel,
-    QLineEdit,
     QPushButton,
+    QLineEdit,
     QVBoxLayout,
 )
 
@@ -21,13 +21,12 @@ from services.activation import activate_with_setup_code
 class _ActivationThread(QThread):
     finished = pyqtSignal(bool, str)
 
-    def __init__(self, setup_code: str, api_url: str):
+    def __init__(self, setup_code: str):
         super().__init__()
         self._setup_code = setup_code
-        self._api_url = api_url
 
     def run(self) -> None:
-        result = activate_with_setup_code(self._setup_code, self._api_url)
+        result = activate_with_setup_code(self._setup_code)
         self.finished.emit(result.success, result.message)
 
 
@@ -47,10 +46,11 @@ class SetupWizard(QDialog):
         root.addWidget(subtitle)
 
         form = QFormLayout()
-        self._api_url = QLineEdit(get("api_url") or "https://billeduthu.in")
+        server = QLabel(get("api_url") or "")
+        server.setTextInteractionFlags(Qt.TextInteractionFlag.TextSelectableByMouse)
         self._setup_code = QLineEdit()
         self._setup_code.setPlaceholderText("BE-82K4-91QD")
-        form.addRow("Server URL", self._api_url)
+        form.addRow("Server", server)
         form.addRow("Setup code", self._setup_code)
         root.addLayout(form)
 
@@ -64,10 +64,9 @@ class SetupWizard(QDialog):
 
     def _start_activation(self) -> None:
         code = self._setup_code.text().replace("_", "").strip()
-        api_url = self._api_url.text().strip()
         self._activate.setEnabled(False)
         self._status.setText("Activating...")
-        self._worker = _ActivationThread(code, api_url)
+        self._worker = _ActivationThread(code)
         self._worker.finished.connect(self._activation_finished)
         self._worker.start()
 

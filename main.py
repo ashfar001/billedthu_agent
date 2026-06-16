@@ -68,7 +68,7 @@ def _preflight_checks() -> None:
 
 def main() -> None:
     logger.info("=" * 56)
-    logger.info("BillLess Virtual Receipt Printer starting")
+    logger.info(f"{APP_NAME} starting")
     logger.info("=" * 56)
 
     _preflight_checks()

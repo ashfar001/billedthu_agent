@@ -9,14 +9,31 @@ from PyQt6.QtWidgets import (
     QDialog,
     QFormLayout,
     QHBoxLayout,
+    QInputDialog,
     QLineEdit,
+    QMessageBox,
     QPushButton,
     QVBoxLayout,
 )
 
-from config import ensure_lifecycle_dirs, load, save
+from config import ensure_lifecycle_dirs, load, save, verify_settings_password
 from services import logger
 from services.autostart import install_autostart, remove_autostart
+
+
+def require_settings_unlock(parent=None) -> bool:
+    password, ok = QInputDialog.getText(
+        parent,
+        "Support Unlock",
+        "Enter Bill Eduthu support password:",
+        QLineEdit.EchoMode.Password,
+    )
+    if not ok:
+        return False
+    if verify_settings_password(password):
+        return True
+    QMessageBox.warning(parent, "Settings Locked", "Incorrect support password.")
+    return False
 
 
 class SettingsDialog(QDialog):
