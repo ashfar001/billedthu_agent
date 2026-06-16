@@ -36,6 +36,7 @@ from services.uploader import Uploader
 from services.virtual_printer import VirtualPrinter
 from services.activation import is_activated
 from services.autostart import install_autostart
+from services.single_instance import SingleInstance
 from ui.main_window import MainWindow
 from ui.setup_wizard import SetupWizard
 
@@ -67,6 +68,11 @@ def _preflight_checks() -> None:
 
 
 def main() -> None:
+    instance = SingleInstance()
+    if not instance.acquire():
+        print("Bill Eduthu Agent is already running.")
+        sys.exit(0)
+
     logger.info("=" * 56)
     logger.info(f"{APP_NAME} starting")
     logger.info("=" * 56)
@@ -133,6 +139,7 @@ def main() -> None:
     pdf_capture.stop()
     spool_monitor.stop()
     uploader.stop()
+    instance.release()
 
     sys.exit(exit_code)
 

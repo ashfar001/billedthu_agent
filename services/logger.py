@@ -5,6 +5,7 @@ Rotating file logger + in-memory ring buffer for the UI log viewer.
 
 import logging
 import os
+import sys
 import threading
 from collections import deque
 from logging.handlers import RotatingFileHandler
@@ -59,12 +60,18 @@ _fh = RotatingFileHandler(
     os.path.join(LOG_DIR, "agent.log"),
     maxBytes=get("log_max_bytes"),
     backupCount=get("log_backup_count"),
+    encoding="utf-8",
 )
 _fh.setLevel(logging.DEBUG)
 _fh.setFormatter(_fmt)
 _logger.addHandler(_fh)
 
 # Console handler
+if hasattr(sys.stderr, "reconfigure"):
+    try:
+        sys.stderr.reconfigure(errors="replace")
+    except Exception:
+        pass
 _ch = logging.StreamHandler()
 _ch.setLevel(logging.INFO)
 _ch.setFormatter(_fmt)

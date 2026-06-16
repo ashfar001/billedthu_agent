@@ -136,41 +136,46 @@ class Uploader:
 
     def _worker(self) -> None:
         while self._running:
-            if self._disabled:
-                time.sleep(5)
-                continue
-            item = db.queue_peek(time.time())
-            if not item:
-                time.sleep(1)
-                continue
+            try:
+                if self._disabled:
+                    time.sleep(5)
+                    continue
+                item = db.queue_peek(time.time())
+                if not item:
+                    time.sleep(1)
+                    continue
 
-            row_id = int(item["id"])
-            receipt_id = int(item["receipt_id"])
-            retries = int(item["retries"])
-            max_retries = int(item["max_retries"])
-            filepath = item["filepath"]
-            file_sha = item["file_hash"]
+                row_id = int(item["id"])
+                receipt_id = int(item["receipt_id"])
+                retries = int(item["retries"])
+                max_retries = int(item["max_retries"])
+                filepath = item["filepath"]
+                file_sha = item["file_hash"]
 
-            if retries >= max_retries:
-                db.queue_mark_dead(row_id, receipt_id, "Retry limit exceeded")
-                move_to_failed(filepath)
-                continue
+                if retries >= max_retries:
+                    db.queue_mark_dead(row_id, receipt_id, "Retry limit exceeded")
+                    move_to_failed(filepath)
+                    continue
 
-            db.queue_mark_uploading(row_id)
-            success, data = self._upload(filepath, file_sha, item.get("parsed_json") or "{}")
-            if success:
-                server_bill_id = data.get("bill_id", "")
-                confirmed = bool(data.get("confirmed"))
-                db.queue_mark_done(row_id, receipt_id, filepath, file_sha, server_bill_id, confirmed)
-                moved = move_to_processed(filepath)
-                self.last_uploaded = os.path.basename(moved or filepath)
-                logger.info(f"Receipt activated: {self.last_uploaded}")
-            else:
-                error = data.get("error", "Upload failed")
-                self.last_error = error
-                delay = self._backoff_seconds(retries)
-                db.queue_mark_failed(row_id, receipt_id, error, time.time() + delay)
-                logger.warning(f"Upload failed; retrying in {delay:.1f}s: {error}")
+                db.queue_mark_uploading(row_id)
+                success, data = self._upload(filepath, file_sha, item.get("parsed_json") or "{}")
+                if success:
+                    server_bill_id = data.get("bill_id", "")
+                    confirmed = bool(data.get("confirmed"))
+                    db.queue_mark_done(row_id, receipt_id, filepath, file_sha, server_bill_id, confirmed)
+                    moved = move_to_processed(filepath)
+                    self.last_uploaded = os.path.basename(moved or filepath)
+                    logger.info(f"Receipt activated: {self.last_uploaded}")
+                else:
+                    error = data.get("error", "Upload failed")
+                    self.last_error = error
+                    delay = self._backoff_seconds(retries)
+                    db.queue_mark_failed(row_id, receipt_id, error, time.time() + delay)
+                    logger.warning(f"Upload failed; retrying in {delay:.1f}s: {error}")
+            except Exception as exc:
+                self.last_error = str(exc)
+                logger.error(f"Upload worker error; will retry: {exc}")
+                time.sleep(3)
 
     def _upload(self, filepath: str, file_sha: str, parsed_json: str) -> tuple[bool, dict]:
         api_url = (get("api_url") or "").rstrip("/")

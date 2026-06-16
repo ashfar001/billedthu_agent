@@ -11,12 +11,15 @@ from __future__ import annotations
 import json
 import sqlite3
 import threading
+import time
 from typing import Any
 
 from config import DB_FILE, get
 
 
 SCHEMA_VERSION = 10
+_DB_LOCK_RETRIES = 8
+_DB_LOCK_DELAY = 0.25
 _local = threading.local()
 
 
@@ -42,12 +45,24 @@ class ReceiptStatus:
 
 def _conn() -> sqlite3.Connection:
     if not hasattr(_local, "conn") or _local.conn is None:
-        _local.conn = sqlite3.connect(DB_FILE, timeout=15)
+        _local.conn = sqlite3.connect(DB_FILE, timeout=30)
         _local.conn.row_factory = sqlite3.Row
         _local.conn.execute("PRAGMA journal_mode=WAL")
-        _local.conn.execute("PRAGMA busy_timeout=5000")
+        _local.conn.execute("PRAGMA busy_timeout=30000")
         _local.conn.execute("PRAGMA foreign_keys=ON")
     return _local.conn
+
+
+def _retry_locked(operation):
+    delay = _DB_LOCK_DELAY
+    for attempt in range(_DB_LOCK_RETRIES):
+        try:
+            return operation()
+        except sqlite3.OperationalError as exc:
+            if "database is locked" not in str(exc).lower() or attempt == _DB_LOCK_RETRIES - 1:
+                raise
+            time.sleep(delay)
+            delay = min(delay * 1.75, 3.0)
 
 
 def init_db() -> None:
@@ -164,15 +179,14 @@ def _safe_add_column(conn: sqlite3.Connection, table: str, column: str, col_type
 
 
 def history_exists(file_hash: str) -> bool:
-    row = _conn().execute(
+    row = _retry_locked(lambda: _conn().execute(
         "SELECT 1 FROM upload_history WHERE file_hash=? UNION SELECT 1 FROM receipts WHERE file_hash=? AND status IN (?, ?)",
         (file_hash, file_hash, ReceiptStatus.ACTIVE, ReceiptStatus.DUPLICATE),
-    ).fetchone()
+    ).fetchone())
     return row is not None
 
 
 def create_receipt(filepath: str, file_hash: str, parsed: dict[str, Any]) -> int:
-    conn = _conn()
     receipt_json = parsed.get("receipt_json") or parsed
     receipt = receipt_json.get("receipt", {})
     merchant = receipt_json.get("merchant", {})
@@ -185,67 +199,80 @@ def create_receipt(filepath: str, file_hash: str, parsed: dict[str, Any]) -> int
         if metadata.get("needs_review")
         else ReceiptStatus.PARSED
     )
-    cur = conn.execute(
-        """
-        INSERT INTO receipts (
-            filepath, bill_file, original_filename, file_hash, status, shop_id, device_id,
-            counter_id, bill_number, total, subtotal, tax, cashier,
-            payment_method, shop_name, receipt_timestamp, parsed_json
-        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-        """,
-        (
-            filepath,
-            filepath,
-            parsed.get("original_filename", ""),
-            file_hash,
-            status,
-            get("store_code") or get("shop_id") or "",
-            get("device_id") or "",
-            receipt.get("counter_id") or get("counter_id") or "",
-            receipt.get("bill_number") or receipt.get("invoice_number") or "",
-            summary.get("grand_total"),
-            summary.get("subtotal"),
-            summary.get("tax_total"),
-            receipt.get("cashier", "") or "",
-            receipt.get("payment_method", "") or "",
-            merchant.get("name", "") or "",
-            " ".join(part for part in (receipt.get("date"), receipt.get("time")) if part),
-            json.dumps(receipt_json, ensure_ascii=False),
-        ),
-    )
-    conn.commit()
-    return int(cur.lastrowid)
+    def op():
+        conn = _conn()
+        cur = conn.execute(
+            """
+            INSERT INTO receipts (
+                filepath, bill_file, original_filename, file_hash, status, shop_id, device_id,
+                counter_id, bill_number, total, subtotal, tax, cashier,
+                payment_method, shop_name, receipt_timestamp, parsed_json
+            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+            """,
+            (
+                filepath,
+                filepath,
+                parsed.get("original_filename", ""),
+                file_hash,
+                status,
+                get("store_code") or get("shop_id") or "",
+                get("device_id") or "",
+                receipt.get("counter_id") or get("counter_id") or "",
+                receipt.get("bill_number") or receipt.get("invoice_number") or "",
+                summary.get("grand_total"),
+                summary.get("subtotal"),
+                summary.get("tax_total"),
+                receipt.get("cashier", "") or "",
+                receipt.get("payment_method", "") or "",
+                merchant.get("name", "") or "",
+                " ".join(part for part in (receipt.get("date"), receipt.get("time")) if part),
+                json.dumps(receipt_json, ensure_ascii=False),
+            ),
+        )
+        conn.commit()
+        return int(cur.lastrowid)
+
+    return _retry_locked(op)
 
 
 def mark_receipt(receipt_id: int, status: str, error: str = "", server_bill_id: str = "", confirmed: bool = False) -> None:
-    _conn().execute(
-        """
-        UPDATE receipts
-        SET status=?, last_error=?, server_bill_id=COALESCE(NULLIF(?, ''), server_bill_id),
-            server_confirmed=?, updated_at=datetime('now','localtime')
-        WHERE id=?
-        """,
-        (status, error, server_bill_id, 1 if confirmed else 0, receipt_id),
-    )
-    _conn().commit()
+    def op():
+        conn = _conn()
+        conn.execute(
+            """
+            UPDATE receipts
+            SET status=?, last_error=?, server_bill_id=COALESCE(NULLIF(?, ''), server_bill_id),
+                server_confirmed=?, updated_at=datetime('now','localtime')
+            WHERE id=?
+            """,
+            (status, error, server_bill_id, 1 if confirmed else 0, receipt_id),
+        )
+        conn.commit()
+    _retry_locked(op)
 
 
 def queue_add(receipt_id: int, filepath: str, file_hash: str) -> int:
-    cur = _conn().execute(
-        """
-        INSERT INTO upload_queue (receipt_id, filepath, file_hash, max_retries)
-        VALUES (?, ?, ?, ?)
-        """,
-        (receipt_id, filepath, file_hash, int(get("upload_retry_count") or 3)),
-    )
-    row = _conn().execute("SELECT status FROM receipts WHERE id=?", (receipt_id,)).fetchone()
+    def op():
+        conn = _conn()
+        cur = conn.execute(
+            """
+            INSERT INTO upload_queue (receipt_id, filepath, file_hash, max_retries)
+            VALUES (?, ?, ?, ?)
+            """,
+            (receipt_id, filepath, file_hash, int(get("upload_retry_count") or 3)),
+        )
+        conn.commit()
+        return int(cur.lastrowid)
+
+    queue_id = _retry_locked(op)
+    row = _retry_locked(lambda: _conn().execute("SELECT status FROM receipts WHERE id=?", (receipt_id,)).fetchone())
     if not row or row["status"] not in (ReceiptStatus.NEEDS_REVIEW, ReceiptStatus.NEEDS_TABLE_ASSIGNMENT):
         mark_receipt(receipt_id, ReceiptStatus.QUEUED)
-    return int(cur.lastrowid)
+    return queue_id
 
 
 def queue_peek(now: float) -> dict[str, Any] | None:
-    row = _conn().execute(
+    row = _retry_locked(lambda: _conn().execute(
         """
         SELECT q.*, r.parsed_json
         FROM upload_queue q
@@ -254,54 +281,66 @@ def queue_peek(now: float) -> dict[str, Any] | None:
         ORDER BY q.id ASC LIMIT 1
         """,
         (QueueStatus.PENDING, now),
-    ).fetchone()
+    ).fetchone())
     return dict(row) if row else None
 
 
 def queue_mark_uploading(row_id: int) -> None:
-    _conn().execute(
-        "UPDATE upload_queue SET status=?, updated_at=datetime('now','localtime') WHERE id=?",
-        (QueueStatus.UPLOADING, row_id),
-    )
-    _conn().commit()
+    def op():
+        conn = _conn()
+        conn.execute(
+            "UPDATE upload_queue SET status=?, updated_at=datetime('now','localtime') WHERE id=?",
+            (QueueStatus.UPLOADING, row_id),
+        )
+        conn.commit()
+    _retry_locked(op)
 
 
 def queue_mark_failed(row_id: int, receipt_id: int, error: str, next_attempt_at: float) -> None:
-    _conn().execute(
-        """
-        UPDATE upload_queue
-        SET status=?, retries=retries+1, error_msg=?, next_attempt_at=?,
-            updated_at=datetime('now','localtime')
-        WHERE id=?
-        """,
-        (QueueStatus.PENDING, error, next_attempt_at, row_id),
-    )
+    def op():
+        conn = _conn()
+        conn.execute(
+            """
+            UPDATE upload_queue
+            SET status=?, retries=retries+1, error_msg=?, next_attempt_at=?,
+                updated_at=datetime('now','localtime')
+            WHERE id=?
+            """,
+            (QueueStatus.PENDING, error, next_attempt_at, row_id),
+        )
+        conn.commit()
+    _retry_locked(op)
     mark_receipt(receipt_id, ReceiptStatus.FAILED, error=error)
 
 
 def queue_mark_dead(row_id: int, receipt_id: int, error: str) -> None:
-    _conn().execute(
-        "UPDATE upload_queue SET status=?, error_msg=?, updated_at=datetime('now','localtime') WHERE id=?",
-        (QueueStatus.DEAD, error, row_id),
-    )
+    def op():
+        conn = _conn()
+        conn.execute(
+            "UPDATE upload_queue SET status=?, error_msg=?, updated_at=datetime('now','localtime') WHERE id=?",
+            (QueueStatus.DEAD, error, row_id),
+        )
+        conn.commit()
+    _retry_locked(op)
     mark_receipt(receipt_id, ReceiptStatus.FAILED, error=error)
-    _conn().commit()
 
 
 def queue_mark_done(row_id: int, receipt_id: int, filepath: str, file_hash: str, server_bill_id: str, confirmed: bool) -> None:
-    conn = _conn()
-    conn.execute("DELETE FROM upload_queue WHERE id=?", (row_id,))
-    conn.execute(
-        "INSERT OR IGNORE INTO upload_history (receipt_id, filepath, file_hash, server_bill_id) VALUES (?, ?, ?, ?)",
-        (receipt_id, filepath, file_hash, server_bill_id),
-    )
-    conn.commit()
+    def op():
+        conn = _conn()
+        conn.execute("DELETE FROM upload_queue WHERE id=?", (row_id,))
+        conn.execute(
+            "INSERT OR IGNORE INTO upload_history (receipt_id, filepath, file_hash, server_bill_id) VALUES (?, ?, ?, ?)",
+            (receipt_id, filepath, file_hash, server_bill_id),
+        )
+        conn.commit()
+    _retry_locked(op)
     mark_receipt(receipt_id, ReceiptStatus.ACTIVE if confirmed else ReceiptStatus.UPLOADED,
                  server_bill_id=server_bill_id, confirmed=confirmed)
 
 
 def queue_counts() -> dict[str, int]:
-    rows = _conn().execute("SELECT status, COUNT(*) AS count FROM upload_queue GROUP BY status").fetchall()
+    rows = _retry_locked(lambda: _conn().execute("SELECT status, COUNT(*) AS count FROM upload_queue GROUP BY status").fetchall())
     counts = {QueueStatus.PENDING: 0, QueueStatus.UPLOADING: 0, QueueStatus.DEAD: 0}
     for row in rows:
         counts[row["status"]] = row["count"]
@@ -309,20 +348,20 @@ def queue_counts() -> dict[str, int]:
 
 
 def upload_success_count() -> int:
-    row = _conn().execute("SELECT COUNT(*) FROM upload_history").fetchone()
+    row = _retry_locked(lambda: _conn().execute("SELECT COUNT(*) FROM upload_history").fetchone())
     return int(row[0] if row else 0)
 
 
 def failed_count() -> int:
-    row = _conn().execute(
+    row = _retry_locked(lambda: _conn().execute(
         "SELECT COUNT(*) FROM receipts WHERE status=?",
         (ReceiptStatus.FAILED,),
-    ).fetchone()
+    ).fetchone())
     return int(row[0] if row else 0)
 
 
 def last_receipt() -> dict[str, Any] | None:
-    row = _conn().execute(
+    row = _retry_locked(lambda: _conn().execute(
         "SELECT * FROM receipts ORDER BY id DESC LIMIT 1"
-    ).fetchone()
+    ).fetchone())
     return dict(row) if row else None
