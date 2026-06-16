@@ -201,12 +201,13 @@ def _local_tesseract_ocr(filepath: str) -> str:
         logger.info("PDF has no selectable text; local OCR is disabled")
         return ""
 
-    tesseract = get("tesseract_cmd") or shutil.which("tesseract")
+    tesseract = _find_tesseract()
     if not tesseract:
         logger.warning("PDF has no selectable text; install Tesseract OCR for free local OCR fallback")
         return ""
 
     try:
+        logger.info(f"Running local OCR with Tesseract: {tesseract}")
         image_paths = _render_pdf_pages_for_ocr(filepath)
         if not image_paths:
             return ""
@@ -236,6 +237,23 @@ def _local_tesseract_ocr(filepath: str) -> str:
                 os.remove(path)
             except OSError:
                 pass
+
+
+def _find_tesseract() -> str:
+    configured = get("tesseract_cmd") or ""
+    candidates = [
+        configured.strip('" '),
+        shutil.which("tesseract") or "",
+        r"C:\Program Files\Tesseract\tesseract.exe",
+        r"C:\Program Files\Tesseract-OCR\tesseract.exe",
+        r"C:\Program Files (x86)\Tesseract-OCR\tesseract.exe",
+    ]
+    for candidate in candidates:
+        if candidate and os.path.isfile(candidate):
+            return candidate
+    if configured:
+        logger.warning(f"Configured Tesseract path not found: {configured}")
+    return ""
 
 
 def _render_pdf_pages_for_ocr(filepath: str) -> list[str]:

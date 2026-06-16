@@ -21,6 +21,21 @@ from services import logger
 from services.autostart import install_autostart, remove_autostart
 
 
+def _detect_tesseract_path() -> str:
+    import os
+    import shutil
+
+    for candidate in (
+        shutil.which("tesseract") or "",
+        r"C:\Program Files\Tesseract\tesseract.exe",
+        r"C:\Program Files\Tesseract-OCR\tesseract.exe",
+        r"C:\Program Files (x86)\Tesseract-OCR\tesseract.exe",
+    ):
+        if candidate and os.path.isfile(candidate):
+            return candidate
+    return ""
+
+
 def require_settings_unlock(parent=None) -> bool:
     password, ok = QInputDialog.getText(
         parent,
@@ -57,6 +72,8 @@ class SettingsDialog(QDialog):
         self._base_folder = QLineEdit(self._cfg.get("base_folder", ""))
         self._tesseract_cmd = QLineEdit(self._cfg.get("tesseract_cmd", ""))
         self._tesseract_cmd.setPlaceholderText(r"C:\Program Files\Tesseract-OCR\tesseract.exe")
+        self._detect_tesseract = QPushButton("Detect Tesseract")
+        self._detect_tesseract.clicked.connect(self._detect_tesseract_clicked)
         self._auto_start = QCheckBox("Start Bill Eduthu when Windows starts")
         self._auto_start.setChecked(bool(self._cfg.get("auto_start", True)))
         self._local_ocr = QCheckBox("Use free local OCR for image-only PDFs")
@@ -69,6 +86,7 @@ class SettingsDialog(QDialog):
         form.addRow("Counter ID", self._counter_id)
         form.addRow("Base folder", self._base_folder)
         form.addRow("Tesseract path", self._tesseract_cmd)
+        form.addRow("", self._detect_tesseract)
         form.addRow("", self._local_ocr)
         form.addRow("", self._auto_start)
         root.addLayout(form)
@@ -100,3 +118,10 @@ class SettingsDialog(QDialog):
             remove_autostart()
         logger.info("Settings saved")
         self.accept()
+
+    def _detect_tesseract_clicked(self) -> None:
+        path = _detect_tesseract_path()
+        if path:
+            self._tesseract_cmd.setText(path)
+        else:
+            QMessageBox.warning(self, "Tesseract", "Tesseract was not found on this computer.")
