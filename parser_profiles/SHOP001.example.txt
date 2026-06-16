@@ -1,0 +1,19 @@
+Bhagini
+Sriganda Palace
+Service Rd, T K Reddy Layout, Annaiah Reddy Layout,
+Banaswadi, Bengaluru, Karnataka 560043
+GST No 29ADDPR8125K1Z2
+RECEIPT
+Name: Siva Shankar     Invoice No: 7767
+Table: #37             Date: 16 May 2024
+
+Item                 Price     Qty     Total
+Mutton biriyani      ₹400      4       ₹1600
+Tandoori Roti        ₹30       5       ₹150
+Chilly chicken       ₹250      2       ₹500
+Chicken pepper       ₹250      3       ₹750
+
+Sub-Total:           ₹ 3000
+CGST:       2.5%     ₹ 75
+SGST:       2.5%     ₹ 75
+Mode: Cash           Total: ₹ 3150

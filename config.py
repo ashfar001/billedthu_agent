@@ -125,6 +125,10 @@ def queue_folder() -> str:
     return get_folder("queue")
 
 
+def parser_profiles_folder() -> str:
+    return get_folder("parser_profiles")
+
+
 def spool_capture_folder() -> str:
     return os.path.join(incoming_folder(), "_spool_capture")
 
@@ -278,7 +282,7 @@ def ensure_lifecycle_dirs():
     os.makedirs(LOG_DIR, exist_ok=True)
     os.makedirs(logs_folder(), exist_ok=True)
     for folder_fn in (incoming_folder, processing_folder,
-                      processed_folder, failed_folder, archive_folder, queue_folder):
+                      processed_folder, failed_folder, archive_folder, queue_folder, parser_profiles_folder):
         os.makedirs(folder_fn(), exist_ok=True)
     os.makedirs(spool_capture_folder(), exist_ok=True)
 

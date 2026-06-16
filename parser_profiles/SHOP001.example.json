@@ -1,0 +1,8 @@
+{
+  "name": "Example restaurant bill layout",
+  "merchant_name": "Bhagini",
+  "item_layout": "item_price_qty_total",
+  "subtotal_labels": ["Sub-Total"],
+  "grand_total_labels": ["Total"],
+  "skip_item_line_contains": ["GST No", "RECEIPT"]
+}

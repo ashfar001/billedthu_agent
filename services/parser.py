@@ -17,6 +17,7 @@ from typing import Any
 
 from config import get
 from services import logger
+from services.parser_profiles import load_parser_profile
 
 
 PARSER_VERSION = "v1"
@@ -98,14 +99,17 @@ _NON_ITEM_WORDS = (
 def parse_receipt(filepath: str) -> dict[str, Any]:
     raw_text, extraction_method = extract_raw_text(filepath)
     lines = _clean_lines(raw_text)
+    profile = load_parser_profile(raw_text)
     receipt_json = _standard_receipt()
     receipt_json["metadata"]["raw_text"] = raw_text
     receipt_json["metadata"]["extraction_method"] = extraction_method
+    if profile:
+        receipt_json["metadata"]["parser_profile"] = profile.get("name") or profile.get("item_layout") or "store_profile"
 
-    _parse_merchant(receipt_json, lines, raw_text)
+    _parse_merchant(receipt_json, lines, raw_text, profile)
     _parse_receipt_header(receipt_json, raw_text)
-    receipt_json["items"] = _extract_items(lines)
-    _parse_summary(receipt_json, raw_text)
+    receipt_json["items"] = _extract_items(lines, profile)
+    _parse_summary(receipt_json, raw_text, profile)
     _validate_receipt_json(receipt_json)
     _score_receipt(receipt_json, raw_text)
 
@@ -360,12 +364,13 @@ def _clean_lines(text: str) -> list[str]:
     return [line.rstrip() for line in normalized.splitlines() if line.strip()]
 
 
-def _parse_merchant(receipt_json: dict[str, Any], lines: list[str], text: str) -> None:
+def _parse_merchant(receipt_json: dict[str, Any], lines: list[str], text: str, profile: dict[str, Any] | None = None) -> None:
     merchant = receipt_json["merchant"]
     merchant["gstin"] = _first_match(text, [_GSTIN], flags=re.I)
     merchant["phone"] = _first_match(text, [_PHONE])
-    merchant["name"] = _detect_store_name(lines)
-    merchant["address"] = _detect_address(lines)
+    profile = profile or {}
+    merchant["name"] = profile.get("merchant_name") or _detect_store_name(lines)
+    merchant["address"] = profile.get("merchant_address") or _detect_address(lines)
 
 
 def _detect_store_name(lines: list[str]) -> str:
@@ -440,9 +445,10 @@ def _parse_receipt_header(receipt_json: dict[str, Any], text: str) -> None:
     ])
 
 
-def _parse_summary(receipt_json: dict[str, Any], text: str) -> None:
+def _parse_summary(receipt_json: dict[str, Any], text: str, profile: dict[str, Any] | None = None) -> None:
+    profile = profile or {}
     summary = receipt_json["summary"]
-    summary["subtotal"] = _money_after(text, ["subtotal", "sub total", "sub-total", "taxable amount"])
+    summary["subtotal"] = _money_after(text, profile.get("subtotal_labels", []) + ["subtotal", "sub total", "sub-total", "taxable amount"])
     summary["discount"] = _money_after(text, ["discount", "disc"])
     summary["cgst"] = _tax_amount_after(text, "cgst")
     summary["sgst"] = _tax_amount_after(text, "sgst")
@@ -454,7 +460,7 @@ def _parse_summary(receipt_json: dict[str, Any], text: str) -> None:
     summary["tax_total"] = explicit_tax if explicit_tax is not None else _sum_present(tax_parts)
 
     for labels in (
-        ["grand total", "net total"],
+        profile.get("grand_total_labels", []) + ["grand total", "net total"],
         ["balance due"],
         ["amount due"],
         ["total amount"],
@@ -467,14 +473,15 @@ def _parse_summary(receipt_json: dict[str, Any], text: str) -> None:
             break
 
 
-def _extract_items(lines: list[str]) -> list[dict[str, Any]]:
+def _extract_items(lines: list[str], profile: dict[str, Any] | None = None) -> list[dict[str, Any]]:
+    profile = profile or {}
     items: list[dict[str, Any]] = []
     for raw_line in lines:
         line = _collapse(raw_line)
-        if not _could_be_item_line(line):
+        if not _could_be_item_line(line, profile):
             continue
 
-        parsed = _parse_item_line(line)
+        parsed = _parse_item_line(line, profile)
         if not parsed:
             continue
         name, qty, unit_price, total_price, tax_rate = parsed
@@ -497,7 +504,8 @@ def _extract_items(lines: list[str]) -> list[dict[str, Any]]:
     return items[:200]
 
 
-def _parse_item_line(line: str) -> tuple[str, float, float | None, float | None, float | None] | None:
+def _parse_item_line(line: str, profile: dict[str, Any] | None = None) -> tuple[str, float, float | None, float | None, float | None] | None:
+    profile = profile or {}
     tax_rate = _extract_tax_rate(line)
     stripped = re.sub(r"\b\d{1,2}(?:\.\d+)?\s*%\b", "", line).strip()
     money_matches = list(re.finditer(rf"(?:rs\.?|inr|₹)?\s*{_MONEY}\b", stripped, re.I))
@@ -527,7 +535,9 @@ def _parse_item_line(line: str) -> tuple[str, float, float | None, float | None,
     if not amount_values:
         return None
 
-    column_item = _parse_price_qty_total_line(stripped, money_matches, amount_values, tax_rate)
+    column_item = _parse_profile_item_line(stripped, money_matches, amount_values, tax_rate, profile)
+    if not column_item:
+        column_item = _parse_price_qty_total_line(stripped, money_matches, amount_values, tax_rate)
     if column_item:
         return column_item
 
@@ -595,12 +605,37 @@ def _parse_price_qty_total_line(
     return name[:120], quantity, unit_price, total_price, tax_rate
 
 
-def _could_be_item_line(line: str) -> bool:
+def _parse_profile_item_line(
+    line: str,
+    money_matches: list[re.Match],
+    amount_values: list[float],
+    tax_rate: float | None,
+    profile: dict[str, Any],
+) -> tuple[str, float, float | None, float | None, float | None] | None:
+    layout = profile.get("item_layout")
+    if layout == "item_price_qty_total":
+        return _parse_price_qty_total_line(line, money_matches, amount_values, tax_rate)
+    if layout == "item_qty_price_total" and len(amount_values) >= 3 and len(money_matches) >= 3:
+        quantity = amount_values[-3]
+        unit_price = amount_values[-2]
+        total_price = amount_values[-1]
+        if quantity and unit_price and total_price and abs((quantity * unit_price) - total_price) <= max(1.0, total_price * 0.03):
+            name = _clean_item_name(line[: money_matches[-3].start()])
+            if name:
+                return name[:120], quantity, unit_price, total_price, tax_rate
+    return None
+
+
+def _could_be_item_line(line: str, profile: dict[str, Any] | None = None) -> bool:
+    profile = profile or {}
     lower = line.lower()
     if len(line) < 4 or not re.search(r"[A-Za-z]", line):
         return False
     if any(label in lower for label in _SUMMARY_LABELS):
         return False
+    for word in profile.get("skip_item_line_contains", []):
+        if str(word).lower() in lower:
+            return False
     if any(word in lower for word in _NON_ITEM_WORDS):
         return False
     if _looks_like_address_line(line):
