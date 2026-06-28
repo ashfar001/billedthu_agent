@@ -132,11 +132,12 @@ def _shadow(widget: QWidget, blur: int = 22, alpha: int = 28) -> None:
 class MainWindow(QMainWindow):
     _log_signal = pyqtSignal(str)
 
-    def __init__(self, virtual_printer, spool_monitor, pdf_capture, uploader, heartbeat):
+    def __init__(self, virtual_printer, spool_monitor, pdf_capture, network_printer, uploader, heartbeat):
         super().__init__()
         self._virtual_printer = virtual_printer
         self._spool_monitor = spool_monitor
         self._pdf_capture = pdf_capture
+        self._network_printer = network_printer
         self._uploader = uploader
         self._heartbeat = heartbeat
 
@@ -333,6 +334,8 @@ class MainWindow(QMainWindow):
         detail = state.message or state.name
         if self._spool_monitor.error:
             detail = self._spool_monitor.error
+        if self._network_printer.error:
+            detail = f"LAN listener: {self._network_printer.error}"
         self._printer_detail.setText(detail)
 
         if self._heartbeat.backend_online:
@@ -376,6 +379,9 @@ class MainWindow(QMainWindow):
         elif self._pdf_capture.last_captured:
             self._last_name.setText(self._pdf_capture.last_captured)
             self._last_meta.setText("Captured, waiting for parser")
+        elif self._network_printer.last_receipt:
+            self._last_name.setText(self._network_printer.last_receipt)
+            self._last_meta.setText("LAN print captured, waiting for parser")
 
     def _load_receipt_json(self, value: str) -> dict:
         try:
@@ -446,6 +452,7 @@ class MainWindow(QMainWindow):
         self._virtual_printer.ensure_installed()
         self._spool_monitor.start()
         self._pdf_capture.start()
+        self._network_printer.start()
         self._uploader.start()
         self._heartbeat.start()
         logger.info("Services started")
@@ -453,6 +460,7 @@ class MainWindow(QMainWindow):
     def _stop_services(self) -> None:
         self._heartbeat.stop()
         self._pdf_capture.stop()
+        self._network_printer.stop()
         self._spool_monitor.stop()
         self._uploader.stop()
         logger.info("Services stopped")

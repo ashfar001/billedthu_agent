@@ -131,6 +131,9 @@ def fix_settings() -> None:
     settings.setdefault("merchant_name", "")
     settings.setdefault("printer_name", "Bill Eduthu Printer")
     settings.setdefault("printer_capture_filename", "billless_capture.pdf")
+    settings.setdefault("network_printer_enabled", True)
+    settings.setdefault("network_printer_host", "0.0.0.0")
+    settings.setdefault("network_printer_port", 9100)
     settings.setdefault("local_ocr_enabled", True)
     settings.setdefault("local_ocr_max_pages", 3)
     settings.setdefault("tesseract_cmd", "")
@@ -140,6 +143,7 @@ def fix_settings() -> None:
     print(f"Updated {SETTINGS}")
     print(f"base_folder = {settings['base_folder']}")
     print(f"printer_name = {settings['printer_name']}")
+    print(f"LAN printer = {settings['network_printer_host']}:{settings['network_printer_port']}")
 
 
 def test_backend() -> None:

@@ -1,18 +1,18 @@
-# BillLess Virtual Receipt Printer - Windows Start Guide
+# Bill Eduthu Agent - Windows Start Guide
 
 This app is for Windows 10/11 only.
 
 It creates a virtual printer named:
 
 ```text
-BillLess Printer
+Bill Eduthu Printer
 ```
 
 Flow:
 
 ```text
 POS Software
--> BillLess Printer
+-> Bill Eduthu Printer
 -> silent PDF capture
 -> receipt parsing
 -> backend upload
@@ -177,8 +177,8 @@ Example:
   "shop_id": "SHOP001",
   "device_id": "DEV001",
   "counter_id": "C1",
-  "base_folder": "C:\\Users\\YourUser\\Documents\\BillLess",
-  "printer_name": "BillLess Printer",
+  "base_folder": "C:\\ProgramData\\BillEduthuAgent",
+  "printer_name": "Bill Eduthu Printer",
   "api_key": "YOUR_BACKEND_TOKEN"
 }
 ```
@@ -187,15 +187,18 @@ Production example:
 
 ```json
 {
-  "config_version": 5,
+  "config_version": 7,
   "api_url": "https://api.yourdomain.com",
   "require_https": true,
   "shop_id": "SHOP001",
   "device_id": "DEV001",
   "counter_id": "C1",
-  "base_folder": "C:\\Users\\azinz\\Documents\\BillLess",
-  "printer_name": "BillLess Printer",
+  "base_folder": "C:\\ProgramData\\BillEduthuAgent",
+  "printer_name": "Bill Eduthu Printer",
   "printer_capture_filename": "billless_capture.pdf",
+  "network_printer_enabled": true,
+  "network_printer_host": "0.0.0.0",
+  "network_printer_port": 9100,
   "api_key": "PASTE_PRODUCTION_TOKEN_HERE",
   "auto_start": true
 }
@@ -233,6 +236,52 @@ upload queued
 backend upload attempted
 logs updated
 ```
+
+## FoodChow POS / WIFI-LAN Printer Setup
+
+FoodChow does not show normal Windows printers in its USB printer picker. Use its `WIFI/LAN` thermal-printer mode.
+
+In `settings.json`, keep:
+
+```json
+"network_printer_enabled": true,
+"network_printer_host": "0.0.0.0",
+"network_printer_port": 9100
+```
+
+Restart Bill Eduthu Agent. The logs should show:
+
+```text
+LAN thermal printer listener ready on 0.0.0.0:9100
+```
+
+In FoodChow:
+
+```text
+Select Printer Brand: Thermal Printer
+Select Printer Type: WIFI/LAN
+IP Address: 127.0.0.1
+Port: 9100
+Paper Size: 80MM
+Printing Type: Bill Printing
+```
+
+If FoodChow does not accept `127.0.0.1`, use this PC's IPv4 address.
+
+Find IPv4:
+
+```powershell
+ipconfig
+```
+
+Example:
+
+```text
+IP Address: 192.168.1.25
+Port: 9100
+```
+
+If Windows Firewall asks, allow Python or Bill Eduthu Agent on private networks.
 
 ## Build Windows EXE
 

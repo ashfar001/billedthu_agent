@@ -77,6 +77,9 @@ DEFAULTS = {
     "auto_update_enabled": True,
     "spool_poll_interval": 1,
     "backend_timeout_seconds": 30,
+    "network_printer_enabled": True,
+    "network_printer_host": "0.0.0.0",
+    "network_printer_port": 9100,
     "google_vision_enabled": False,
     "local_ocr_enabled": True,
     "local_ocr_max_pages": 3,
@@ -154,6 +157,9 @@ _MIGRATIONS = {
         "printer_capture_filename": "billless_capture.pdf",
         "spool_poll_interval": 1,
         "backend_timeout_seconds": 30,
+        "network_printer_enabled": True,
+        "network_printer_host": "0.0.0.0",
+        "network_printer_port": 9100,
     }),
     5: lambda cfg: cfg.update({
         "store_code": cfg.get("store_code") or cfg.get("shop_id", ""),
@@ -170,6 +176,11 @@ _MIGRATIONS = {
         "settings_password_hash": cfg.get("settings_password_hash")
         or os.environ.get("BILL_EDUTHU_SETTINGS_PASSWORD_HASH")
         or _DEFAULT_SETTINGS_PASSWORD_HASH,
+    }),
+    7: lambda cfg: cfg.update({
+        "network_printer_enabled": True,
+        "network_printer_host": "0.0.0.0",
+        "network_printer_port": 9100,
     }),
 }
 

@@ -30,6 +30,7 @@ from services import logger
 from services.database import init_db
 from services.file_manager import cleanup_old_files
 from services.heartbeat import HeartbeatService
+from services.escpos_listener import EscPosNetworkPrinter
 from services.pdf_capture import PDFCaptureService
 from services.spool_monitor import SpoolMonitor
 from services.uploader import Uploader
@@ -114,6 +115,7 @@ def main() -> None:
 
     uploader = Uploader()
     pdf_capture = PDFCaptureService(on_captured=uploader.enqueue)
+    network_printer = EscPosNetworkPrinter(on_receipt=uploader.enqueue)
     spool_monitor = SpoolMonitor(printer_name=get("printer_name"))
     heartbeat = HeartbeatService(device=None, uploader=uploader)
 
@@ -121,12 +123,14 @@ def main() -> None:
         virtual_printer=virtual_printer,
         spool_monitor=spool_monitor,
         pdf_capture=pdf_capture,
+        network_printer=network_printer,
         uploader=uploader,
         heartbeat=heartbeat,
     )
 
     spool_monitor.start()
     pdf_capture.start()
+    network_printer.start()
     uploader.start()
     heartbeat.start()
     logger.info("Background printer capture services running")
@@ -137,6 +141,7 @@ def main() -> None:
     logger.info("Shutting down")
     heartbeat.stop()
     pdf_capture.stop()
+    network_printer.stop()
     spool_monitor.stop()
     uploader.stop()
     instance.release()
